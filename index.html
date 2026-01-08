@@ -123,6 +123,7 @@ main { display: flex; justify-content: center; padding: 5px; width: 100%; }
     justify-content: space-between;
 }
 
+/* TỐI ƯU ẢNH LEADER: Giữ nguyên vẹn phần đầu */
 .leader-column { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 220px; flex-shrink: 0; }
 .leader-name-tag { 
     font-size: 16px; font-weight: 800; color: #ffeb3b; 
@@ -130,12 +131,24 @@ main { display: flex; justify-content: center; padding: 5px; width: 100%; }
     text-shadow: 0 0 10px #ffeb3b, 0 0 20px #ffeb3b;
     display: flex; align-items: center; gap: 5px;
 }
-.leader-frame { width: 100%; height: 600px; border: 3px solid #ffeb3b; border-radius: 35px; overflow: hidden; }
-.leader-frame img { width: 100%; height: 100%; object-fit: cover; }
+.leader-frame { 
+    width: 100%; 
+    height: 600px; 
+    border: 3px solid #ffeb3b; 
+    border-radius: 35px; 
+    overflow: hidden; 
+    background: rgba(255,255,255,0.05); /* Nền nhẹ để thấy khung khi ảnh nhỏ */
+    display: flex;
+    align-items: flex-start; /* Ưu tiên bắt đầu từ trên cùng */
+}
+.leader-frame img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: contain; /* HIỂN THỊ TOÀN BỘ ẢNH, KHÔNG CẮT */
+    object-position: top; /* GIỮ PHẦN ĐẦU Ở TRÊN CÙNG */
+}
 
 .stats-table-container { flex-grow: 1; margin: 20px 15px; display: flex; flex-direction: column; align-items: center; overflow: hidden; width: 100%; }
-
-/* Fix cho bảng trên di động */
 .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 15px; }
 
 table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12px; border: 1px solid rgba(255, 235, 59, 0.4); border-radius: 5px; overflow: hidden; }
@@ -154,16 +167,15 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 
 .controls-area { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
 .team-selector { display: flex; gap: 15px; background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 30px; border: 1px solid rgba(255,235,59,0.3); flex-wrap: wrap; justify-content: center; }
-
 .team-option { cursor: pointer; font-weight: bold; color: #cccccc; padding: 5px 8px; border-radius: 20px; font-size: 14px; }
 .team-option input { display: none; }
 .team-option:has(input:checked) { color: #ffeb3b; transform: scale(1.1); text-shadow: 0 0 10px #ffeb3b; }
 
-/* MEDIA QUERIES - TỐI ƯU MOBILE/TABLET */
+/* MEDIA QUERIES */
 @media (max-width: 1024px) {
     .team-display-container { flex-direction: column; align-items: center; height: auto; }
     .leader-column { width: 100%; max-width: 300px; margin-bottom: 20px; }
-    .leader-frame { height: 400px; }
+    .leader-frame { height: 450px; } /* Giảm chiều cao trên mobile để không quá dài */
     header h1 { font-size: 30px; }
     .team-outside-info h2 { font-size: 50px; }
 }
@@ -175,6 +187,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
     .dropbtn { font-size: 16px; min-width: 200px; }
     .team-outside-info h2 { font-size: 40px; }
     .team-display-container { border-radius: 20px; padding: 10px; }
+    .leader-frame { height: 350px; }
 }
 </style>
 </head>
