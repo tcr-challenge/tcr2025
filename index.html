@@ -136,7 +136,7 @@ main { display: flex; justify-content: center; padding: 5px; }
 
 table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; border: 1px solid rgba(255, 235, 59, 0.4); border-radius: 5px; overflow: hidden; margin-bottom: 15px; }
 th, td { border: 1px solid rgba(255, 235, 59, 0.2); padding: 7px 4px; text-align: center; }
-th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; font-size: 15px; } /* Đã tăng cỡ chữ ngày tháng lên 2 size */
+th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; font-size: 15px; }
 .row-member-group-a { background: rgba(255, 255, 255, 0.05); }
 .row-member-group-b { background: rgba(0, 0, 0, 0.3); }
 
@@ -224,8 +224,6 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
                     <label class="team-option"><input type="radio" name="teamSelect" value="TEAM D" onchange="switchTeam(this.value)"><span>TEAM D</span></label>
                 </div>
                 <div class="btn-group">
-                    <input type="file" id="fileInputExcel" accept=".xlsx, .xls" style="display:none" onchange="loadDataFromExcel(this)">
-                    <button class="btn-action" onclick="document.getElementById('fileInputExcel').click()">📊 Nhập File Excel</button>
                     <input type="file" id="bgInput" accept="image/*" style="display:none" onchange="changeBackground(this)">
                     <button class="btn-action" onclick="document.getElementById('bgInput').click()">🖼️ Chọn Ảnh Nền</button>
                 </div>
@@ -250,13 +248,14 @@ const WEEK_DATES = {
     5: ["19/01", "20/01", "21/01", "22/01"]
 };
 
+// THAY ID FILE CỦA ANH VÀO ĐÂY
+const DRIVE_FILE_URL = "https://docs.google.com/spreadsheets/d/1SUHiQixRuR2qZ4bFMfUW-T6PdHyEhrsv/export?format=xlsx";
+
 function switchWeek(week, btn) {
     currentWeek = week;
     document.querySelectorAll('.dropdown-content button').forEach(function(b) { b.classList.remove('active'); });
     if(btn) btn.classList.add('active');
-    
     document.getElementById('selected-week-text').innerText = "TUẦN " + week;
-    
     const dates = WEEK_DATES[week];
     const dateStr = "(" + dates[0] + " - " + dates[dates.length - 1] + ")";
     document.getElementById('week-title').innerText = "BẢNG TỔNG KẾT THỬ THÁCH - TUẦN " + week + " " + dateStr;
@@ -299,7 +298,7 @@ function renderUI() {
     thead.innerHTML = headHtml;
 
     if (!stored) {
-        tbody.innerHTML = "<tr><td colspan='" + (numDays + 2) + "'>Vui lòng nhập file Excel để hiển thị dữ liệu tuần này.</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='" + (numDays + 2) + "'>Đang kết nối dữ liệu Drive...</td></tr>";
         return;
     }
 
@@ -364,83 +363,71 @@ function renderUI() {
     tbody.appendChild(rMonth);
 }
 
-function loadDataFromExcel(input) {
-    if (!input.files[0]) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-        const teams = ["TEAM A", "TEAM B", "TEAM C", "TEAM D"];
-        
-        [1, 2, 3, 4, 5].forEach(function(wNum) {
-            const sheet = wb.Sheets["TUẦN " + wNum];
-            if(!sheet) return;
-            const jsonData = XLSX.utils.sheet_to_json(sheet, {header: 1});
-            const numDays = WEEK_DATES[wNum].length;
-
-            teams.forEach(function(tName) {
-                let startIdx = -1;
-                for(let i=0; i<jsonData.length; i++) {
-                    if(jsonData[i][0] && jsonData[i][0].toString().toUpperCase() === tName) { 
-                        startIdx = i+1; break; 
+function processExcelData(arrayBuffer) {
+    const wb = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+    const teams = ["TEAM A", "TEAM B", "TEAM C", "TEAM D"];
+    [1, 2, 3, 4, 5].forEach(function(wNum) {
+        const sheet = wb.Sheets["TUẦN " + wNum];
+        if(!sheet) return;
+        const jsonData = XLSX.utils.sheet_to_json(sheet, {header: 1});
+        const numDays = WEEK_DATES[wNum].length;
+        teams.forEach(function(tName) {
+            let startIdx = -1;
+            for(let i=0; i<jsonData.length; i++) {
+                if(jsonData[i][0] && jsonData[i][0].toString().toUpperCase() === tName) { startIdx = i+1; break; }
+            }
+            if(startIdx !== -1) {
+                let finalData = { names: [], values: [], monthTotal: 0 };
+                let currentMemberCount = 0;
+                let lastIdxProcessed = startIdx;
+                for(let i = startIdx; i < jsonData.length && currentMemberCount < 7; i++) {
+                    let r1 = jsonData[i];
+                    if(!r1 || !r1[0]) continue;
+                    let cellContent = r1[0].toString().trim();
+                    if(teams.includes(cellContent.toUpperCase()) && cellContent.toUpperCase() !== tName) break;
+                    if(cellContent.toLowerCase().indexOf("ngày") !== -1 || cellContent.toLowerCase().indexOf("họ tên") !== -1) continue;
+                    finalData.names.push(cellContent);
+                    let v1 = r1.slice(1, 1 + numDays).map(function(v) { return parseFloat(v) || 0; });
+                    let v2_total = Array(numDays).fill(0);
+                    let nextRowIdx = i + 1;
+                    while(nextRowIdx < jsonData.length) {
+                        let nextRow = jsonData[nextRowIdx];
+                        if (nextRow && nextRow[0] && nextRow[0].toString().trim() !== "") break;
+                        if(nextRow) { for(let k = 0; k < numDays; k++) { v2_total[k] += parseFloat(nextRow[k+1]) || 0; } }
+                        nextRowIdx++;
                     }
+                    finalData.values.push([v1, v2_total]);
+                    currentMemberCount++; i = nextRowIdx - 1; lastIdxProcessed = nextRowIdx;
                 }
-
-                if(startIdx !== -1) {
-                    let finalData = { names: [], values: [], monthTotal: 0 };
-                    let currentMemberCount = 0;
-                    let lastIdxProcessed = startIdx;
-
-                    for(let i = startIdx; i < jsonData.length && currentMemberCount < 7; i++) {
-                        let r1 = jsonData[i];
-                        if(!r1 || !r1[0]) continue;
-                        let cellContent = r1[0].toString().trim();
-                        if(teams.includes(cellContent.toUpperCase()) && cellContent.toUpperCase() !== tName) break;
-                        if(cellContent.toLowerCase().indexOf("ngày") !== -1 || cellContent.toLowerCase().indexOf("họ tên") !== -1) continue;
-
-                        finalData.names.push(cellContent);
-                        let v1 = r1.slice(1, 1 + numDays).map(function(v) { return parseFloat(v) || 0; });
-                        let v2_total = Array(numDays).fill(0);
-                        let nextRowIdx = i + 1;
-                        while(nextRowIdx < jsonData.length) {
-                            let nextRow = jsonData[nextRowIdx];
-                            if (nextRow && nextRow[0] && nextRow[0].toString().trim() !== "") break;
-                            if(nextRow) {
-                                for(let k = 0; k < numDays; k++) {
-                                    v2_total[k] += parseFloat(nextRow[k+1]) || 0;
-                                }
-                            }
-                            nextRowIdx++;
-                        }
-                        finalData.values.push([v1, v2_total]);
-                        currentMemberCount++;
-                        i = nextRowIdx - 1;
-                        lastIdxProcessed = nextRowIdx;
-                    }
-
-                    let teamMonthVal = 0;
-                    for(let m = lastIdxProcessed; m < jsonData.length; m++) {
-                        let row = jsonData[m];
-                        if(!row || !row[0]) continue;
-                        let firstCell = row[0].toString().toLowerCase();
-                        if(teams.some(function(tn) { return firstCell === tn.toLowerCase(); })) break;
-                        if(firstCell.indexOf("tháng") !== -1) {
-                            teamMonthVal = parseFloat(row[1]) || 0;
-                            break;
-                        }
-                    }
-                    while(finalData.names.length < 7) {
-                        finalData.names.push("Thành viên " + (finalData.names.length + 1));
-                        finalData.values.push([Array(numDays).fill(0), Array(numDays).fill(0)]);
-                    }
-                    finalData.monthTotal = teamMonthVal;
-                    localStorage.setItem("data_" + tName + "_W" + wNum, JSON.stringify(finalData));
+                let teamMonthVal = 0;
+                for(let m = lastIdxProcessed; m < jsonData.length; m++) {
+                    let row = jsonData[m];
+                    if(!row || !row[0]) continue;
+                    let firstCell = row[0].toString().toLowerCase();
+                    if(teams.some(function(tn) { return firstCell === tn.toLowerCase(); })) break;
+                    if(firstCell.indexOf("tháng") !== -1) { teamMonthVal = parseFloat(row[1]) || 0; break; }
                 }
-            });
+                while(finalData.names.length < 7) {
+                    finalData.names.push("Thành viên " + (finalData.names.length + 1));
+                    finalData.values.push([Array(numDays).fill(0), Array(numDays).fill(0)]);
+                }
+                finalData.monthTotal = teamMonthVal;
+                localStorage.setItem("data_" + tName + "_W" + wNum, JSON.stringify(finalData));
+            }
         });
-        renderUI();
-        alert("Đã cập nhật dữ liệu thành công!");
-    };
-    reader.readAsArrayBuffer(input.files[0]);
+    });
+    renderUI();
+}
+
+async function loadDataFromDrive() {
+    try {
+        const response = await fetch(DRIVE_FILE_URL);
+        if (!response.ok) throw new Error("Không thể tải file.");
+        const buffer = await response.arrayBuffer();
+        processExcelData(buffer);
+    } catch (error) {
+        console.error("Lỗi Drive:", error);
+    }
 }
 
 function changeBackground(input) {
@@ -457,6 +444,7 @@ function changeBackground(input) {
 window.onload = function() {
     const bg = localStorage.getItem('custom_app_background');
     if(bg) document.getElementById('bg-overlay').style.backgroundImage = "url('" + bg + "')";
+    loadDataFromDrive();
     switchWeek(1, null);
 };
 </script>
