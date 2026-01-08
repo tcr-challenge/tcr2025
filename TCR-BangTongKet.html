@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCR – YEAR END CHALLENGE 2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<style>
+/* Cưỡng bức Font Unicode chuẩn tiếng Việt */
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+body { 
+    margin: 0; 
+    min-height: 100vh; 
+    color: #ffffff; 
+    overflow-x: hidden; 
+    position: relative;
+    background-color: #000000;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at top, #111111, #4a0000, #001a4a);
+    z-index: -2;
+}
+
+#bg-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.2; 
+    pointer-events: none;
+}
+
+header { text-align: center; padding: 15px 18px 5px 18px; width: 100%; }
+header h1 {
+    font-size: 40px; margin: 0; font-weight: 900;
+    text-transform: uppercase; letter-spacing: 3px; color: #ffffff;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+}
+header h2 { 
+    font-size: 20px; margin: 5px 0; color: #ffffff; 
+    font-weight: 800; text-transform: uppercase;
+    text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000;
+}
+header h3 {
+    font-size: 24px; margin: 5px 0; color: #ffeb3b;
+    font-weight: 900; text-transform: uppercase;
+    text-shadow: 0 0 15px rgba(255, 235, 59, 0.8);
+    letter-spacing: 1px;
+}
+
+.team-outside-info { text-align: center; margin-bottom: 5px; }
+.team-outside-info h2 {
+    font-size: 65px; margin: 0; color: #ffeb3b;
+    text-shadow: 0 0 25px rgba(255, 235, 59, 0.9);
+    font-weight: 950;
+}
+
+/* Nút chọn tuần: Chữ cực to và hiệu ứng Neon động */
+.week-dropdown-container {
+    display: flex; justify-content: center; margin-bottom: 25px; position: relative; z-index: 100;
+}
+.dropdown { position: relative; display: inline-block; }
+
+@keyframes neon-glow {
+    0% { box-shadow: 0 0 5px #ffeb3b, 0 0 10px #ffeb3b; }
+    50% { box-shadow: 0 0 20px #ffeb3b, 0 0 40px #ffeb3b, 0 0 10px #ffffff; }
+    100% { box-shadow: 0 0 5px #ffeb3b, 0 0 10px #ffeb3b; }
+}
+
+.dropbtn {
+    padding: 15px 40px; border-radius: 35px; border: 3px solid #ffeb3b;
+    background: #ffeb3b; color: #000000; font-weight: 950;
+    cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
+    font-size: 22px; 
+    display: flex; align-items: center; justify-content: center;
+    min-width: 180px;
+    animation: neon-glow 2s infinite ease-in-out; 
+    letter-spacing: 1px;
+}
+.dropdown-content {
+    display: none; position: absolute; background-color: rgba(0, 0, 0, 0.95);
+    min-width: 180px; border: 2px solid #ffeb3b; border-radius: 15px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.8); z-index: 1; left: 50%;
+    transform: translateX(-50%); margin-top: 10px; overflow: hidden;
+}
+.dropdown-content button {
+    color: #ffeb3b; padding: 15px 20px; text-decoration: none; display: block;
+    background: none; border: none; width: 100%; cursor: pointer;
+    font-weight: bold; text-transform: uppercase; font-size: 16px; transition: background 0.3s;
+    text-align: center;
+}
+.dropdown-content button:hover { background-color: rgba(255, 235, 59, 0.3); }
+.dropdown-content button.active { background: #ffeb3b; color: #000000; }
+.dropdown:hover .dropdown-content { display: block; }
+.dropdown:hover .dropbtn { 
+    transform: scale(1.05);
+    background: #ffffff;
+    border-color: #ffffff;
+}
+
+main { display: flex; justify-content: center; padding: 5px; }
+
+.team-display-container {
+    display: flex; align-items: flex-start; 
+    background: rgba(0, 0, 0, 0.8); 
+    padding: 25px;
+    border-radius: 45px; border: 2px solid #ffeb3b;
+    box-shadow: 0 0 40px rgba(255, 235, 59, 0.3);
+    backdrop-filter: blur(15px); width: 1450px; height: 880px; 
+    justify-content: space-between;
+}
+
+.leader-column { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 250px; }
+.leader-name-tag { 
+    font-size: 18px; font-weight: 800; color: #ffeb3b; 
+    text-transform: uppercase; min-height: 25px;
+    text-shadow: 0 0 10px #ffeb3b, 0 0 20px #ffeb3b;
+    display: flex; align-items: center; gap: 5px;
+}
+.leader-frame { width: 100%; height: 650px; border: 3px solid #ffeb3b; border-radius: 40px; overflow: hidden; }
+.leader-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+.stats-table-container { flex-grow: 1; margin: 35px 20px 0 20px; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+
+table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; border: 1px solid rgba(255, 235, 59, 0.4); border-radius: 5px; overflow: hidden; margin-bottom: 15px; }
+th, td { border: 1px solid rgba(255, 235, 59, 0.2); padding: 7px 4px; text-align: center; }
+th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; font-size: 15px; } /* Đã tăng cỡ chữ ngày tháng lên 2 size */
+.row-member-group-a { background: rgba(255, 255, 255, 0.05); }
+.row-member-group-b { background: rgba(0, 0, 0, 0.3); }
+
+.leader-name-cell { 
+    font-weight: 900 !important; 
+    color: #ffeb3b !important; 
+    text-transform: uppercase; 
+    text-shadow: 0 0 8px #ffeb3b, 0 0 15px rgba(255, 235, 59, 0.5);
+}
+.member-name-cell { font-weight: bold; }
+
+.badge-leader { color: #ffeb3b; }
+.row-total-day { background: rgba(255, 235, 59, 0.15); font-weight: 900; color: #ffeb3b; }
+.row-total-week { background: rgba(255, 235, 59, 0.2); font-weight: 900; font-size: 22px; color: #ffffff; text-shadow: 0 0 8px #ff0000; }
+.row-total-month { background: rgba(255, 235, 59, 0.25); font-weight: 950; font-size: 30px; color: #ffffff; text-shadow: 0 0 15px #ff0000; }
+.month-value-highlight { font-size: 40px; }
+
+.col-member-total { font-weight: bold; color: #ffeb3b; font-size: 16px; }
+
+.controls-area { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+.team-selector { display: flex; gap: 20px; background: rgba(255,255,255,0.1); padding: 12px 30px; border-radius: 40px; border: 1px solid rgba(255,235,59,0.3); align-items: center; }
+
+.team-option { 
+    cursor: pointer; font-weight: bold; color: #cccccc; 
+    display: flex; align-items: center; gap: 5px;
+    transition: all 0.3s ease;
+    padding: 5px 10px; border-radius: 20px;
+}
+.team-option input { display: none; }
+.team-option:has(input:checked) { 
+    color: #ffeb3b; 
+    transform: scale(1.3); 
+    text-shadow: 0 0 10px #ffeb3b;
+}
+
+.btn-group { display: flex; gap: 10px; }
+.btn-action { background: rgba(255, 235, 59, 0.2); border: 1px solid #ffeb3b; color: #ffeb3b; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+.btn-action:hover { background: #ffeb3b; color: #000000; }
+</style>
+</head>
+<body id="capture-area">
+<div id="bg-overlay"></div>
+
+<header>
+    <h1>THƯỢNG CÁT RUNNERS - TCR</h1>
+    <h2 id="week-title">BẢNG TỔNG KẾT THỬ THÁCH - TUẦN 1 (23/12 - 28/12)</h2>
+    <h3>YEAR-END RUNNING CHALLENGE 2025 - VẠN DẶM BẮT ĐẦU TỪ Ý CHÍ</h3>
+</header>
+
+<div class="week-dropdown-container">
+    <div class="dropdown">
+        <button class="dropbtn">
+            <span id="selected-week-text">TUẦN 1</span>
+        </button>
+        <div class="dropdown-content">
+            <button onclick="switchWeek(1, this)">Tuần 1</button>
+            <button onclick="switchWeek(2, this)">Tuần 2</button>
+            <button onclick="switchWeek(3, this)">Tuần 3</button>
+            <button onclick="switchWeek(4, this)">Tuần 4</button>
+            <button onclick="switchWeek(5, this)">Tuần 5</button>
+        </div>
+    </div>
+</div>
+
+<div class="team-outside-info">
+    <h2 id="display-team-name">TEAM A</h2>
+</div>
+
+<main>
+    <div class="team-display-container">
+        <div class="leader-column">
+            <div class="leader-name-tag">⭐ <span id="name-leader1">ĐỘI TRƯỞNG 1</span></div>
+            <div class="leader-frame"><img id="img-leader1" src=""></div>
+        </div>
+        <div class="stats-table-container">
+            <table id="statsTable">
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div class="controls-area">
+                <div class="team-selector">
+                    <label class="team-option"><input type="radio" name="teamSelect" value="TEAM A" checked onchange="switchTeam(this.value)"><span>TEAM A</span></label>
+                    <label class="team-option"><input type="radio" name="teamSelect" value="TEAM B" onchange="switchTeam(this.value)"><span>TEAM B</span></label>
+                    <label class="team-option"><input type="radio" name="teamSelect" value="TEAM C" onchange="switchTeam(this.value)"><span>TEAM C</span></label>
+                    <label class="team-option"><input type="radio" name="teamSelect" value="TEAM D" onchange="switchTeam(this.value)"><span>TEAM D</span></label>
+                </div>
+                <div class="btn-group">
+                    <input type="file" id="fileInputExcel" accept=".xlsx, .xls" style="display:none" onchange="loadDataFromExcel(this)">
+                    <button class="btn-action" onclick="document.getElementById('fileInputExcel').click()">📊 Nhập File Excel</button>
+                    <input type="file" id="bgInput" accept="image/*" style="display:none" onchange="changeBackground(this)">
+                    <button class="btn-action" onclick="document.getElementById('bgInput').click()">🖼️ Chọn Ảnh Nền</button>
+                </div>
+            </div>
+        </div>
+        <div class="leader-column">
+            <div class="leader-name-tag">⭐ <span id="name-leader2">ĐỘI TRƯỞNG 2</span></div>
+            <div class="leader-frame"><img id="img-leader2" src=""></div>
+        </div>
+    </div>
+</main>
+
+<script>
+let currentTeam = "TEAM A";
+let currentWeek = 1;
+
+const WEEK_DATES = {
+    1: ["23/12", "24/12", "25/12", "26/12", "27/12", "28/12"],
+    2: ["29/12", "30/12", "31/12", "01/01", "02/01", "03/01", "04/01"],
+    3: ["05/01", "06/01", "07/01", "08/01", "09/01", "10/01", "11/01"],
+    4: ["12/01", "13/01", "14/01", "15/01", "16/01", "17/01", "18/01"],
+    5: ["19/01", "20/01", "21/01", "22/01"]
+};
+
+function switchWeek(week, btn) {
+    currentWeek = week;
+    document.querySelectorAll('.dropdown-content button').forEach(function(b) { b.classList.remove('active'); });
+    if(btn) btn.classList.add('active');
+    
+    document.getElementById('selected-week-text').innerText = "TUẦN " + week;
+    
+    const dates = WEEK_DATES[week];
+    const dateStr = "(" + dates[0] + " - " + dates[dates.length - 1] + ")";
+    document.getElementById('week-title').innerText = "BẢNG TỔNG KẾT THỬ THÁCH - TUẦN " + week + " " + dateStr;
+    renderUI();
+}
+
+function switchTeam(val) {
+    currentTeam = val;
+    document.getElementById('display-team-name').innerText = val;
+    renderUI();
+}
+
+function formatFileName(name) {
+    return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/\s+/g, "").toLowerCase();
+}
+
+function formatValue(num) {
+    if (num === 0 || isNaN(num)) return "0";
+    let value = parseFloat(num.toPrecision(12));
+    return value.toLocaleString('vi-VN', { minimumFractionDigits: 0, maximumFractionDigits: 10 });
+}
+
+function formatFullDisplay(num) {
+    if (num === 0 || isNaN(num)) return "0";
+    let value = parseFloat(num.toPrecision(12));
+    return new Intl.NumberFormat('vi-VN', { minimumFractionDigits: 0, maximumFractionDigits: 10 }).format(value);
+}
+
+function renderUI() {
+    const key = "data_" + currentTeam + "_W" + currentWeek;
+    const stored = localStorage.getItem(key);
+    const thead = document.getElementById('tableHead');
+    const tbody = document.getElementById('tableBody');
+    const dates = WEEK_DATES[currentWeek];
+    const numDays = dates.length;
+
+    let headHtml = "<tr><th>Họ Tên</th>";
+    dates.forEach(function(d) { headHtml += "<th>" + d + "</th>"; });
+    headHtml += "<th style='width: 80px;'>TỔNG</th></tr>";
+    thead.innerHTML = headHtml;
+
+    if (!stored) {
+        tbody.innerHTML = "<tr><td colspan='" + (numDays + 2) + "'>Vui lòng nhập file Excel để hiển thị dữ liệu tuần này.</td></tr>";
+        return;
+    }
+
+    const data = JSON.parse(stored);
+    tbody.innerHTML = '';
+    let totalWeek = 0;
+    let dayTotals = Array(numDays).fill(0);
+
+    for (let i = 0; i < 7; i++) {
+        const rowClass = (i % 2 === 0) ? 'row-member-group-a' : 'row-member-group-b';
+        let rawName = (data.names[i] || "Thành viên " + (i+1)).replace('⭐', '').trim();
+        let badge = (i < 2) ? '<span class="badge-leader">⭐</span> ' : '';
+        
+        if(i < 2) {
+            let upperName = rawName.toUpperCase();
+            document.getElementById("name-leader" + (i+1)).innerText = upperName;
+            document.getElementById("img-leader" + (i+1)).src = "img/" + formatFileName(rawName) + ".png";
+            rawName = upperName;
+        }
+
+        let mSum = 0;
+        for (let j = 0; j < 2; j++) {
+            const row = document.createElement('tr');
+            row.className = rowClass;
+            if (j === 0) {
+                const nameCell = document.createElement('td');
+                nameCell.rowSpan = 2;
+                nameCell.className = (i < 2) ? 'member-name-cell leader-name-cell' : 'member-name-cell';
+                nameCell.innerHTML = badge + rawName;
+                row.appendChild(nameCell);
+            }
+            for (let k = 0; k < numDays; k++) {
+                const cell = document.createElement('td');
+                let val = (data.values[i] && data.values[i][j]) ? (parseFloat(data.values[i][j][k]) || 0) : 0;
+                cell.innerText = formatValue(val); 
+                mSum += val;
+                dayTotals[k] += val;
+                row.appendChild(cell);
+            }
+            const totalCell = document.createElement('td');
+            totalCell.className = 'col-member-total';
+            if (j === 0) totalCell.id = "temp-total-" + i; 
+            row.appendChild(totalCell);
+            tbody.appendChild(row);
+        }
+        const mTotalEl = document.getElementById("temp-total-" + i);
+        if(mTotalEl) mTotalEl.innerText = formatValue(mSum);
+        totalWeek += mSum;
+    }
+
+    const rDay = document.createElement('tr'); rDay.className = 'row-total-day';
+    let dH = "<td>TỔNG NGÀY</td>";
+    dayTotals.forEach(function(val) { dH += "<td>" + formatValue(val) + "</td>"; });
+    dH += "<td></td>"; rDay.innerHTML = dH; tbody.appendChild(rDay);
+
+    const rWeek = document.createElement('tr'); rWeek.className = 'row-total-week';
+    rWeek.innerHTML = "<td colspan='" + (numDays + 2) + "'>TỔNG TUẦN: " + formatValue(totalWeek) + " KM</td>";
+    tbody.appendChild(rWeek);
+
+    const rMonth = document.createElement('tr'); rMonth.className = 'row-total-month';
+    rMonth.innerHTML = "<td colspan='" + (numDays + 2) + "'>TỔNG THÁNG: <span class='month-value-highlight'>" + formatFullDisplay(data.monthTotal) + " KM</span></td>";
+    tbody.appendChild(rMonth);
+}
+
+function loadDataFromExcel(input) {
+    if (!input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+        const teams = ["TEAM A", "TEAM B", "TEAM C", "TEAM D"];
+        
+        [1, 2, 3, 4, 5].forEach(function(wNum) {
+            const sheet = wb.Sheets["TUẦN " + wNum];
+            if(!sheet) return;
+            const jsonData = XLSX.utils.sheet_to_json(sheet, {header: 1});
+            const numDays = WEEK_DATES[wNum].length;
+
+            teams.forEach(function(tName) {
+                let startIdx = -1;
+                for(let i=0; i<jsonData.length; i++) {
+                    if(jsonData[i][0] && jsonData[i][0].toString().toUpperCase() === tName) { 
+                        startIdx = i+1; break; 
+                    }
+                }
+
+                if(startIdx !== -1) {
+                    let finalData = { names: [], values: [], monthTotal: 0 };
+                    let currentMemberCount = 0;
+                    let lastIdxProcessed = startIdx;
+
+                    for(let i = startIdx; i < jsonData.length && currentMemberCount < 7; i++) {
+                        let r1 = jsonData[i];
+                        if(!r1 || !r1[0]) continue;
+                        let cellContent = r1[0].toString().trim();
+                        if(teams.includes(cellContent.toUpperCase()) && cellContent.toUpperCase() !== tName) break;
+                        if(cellContent.toLowerCase().indexOf("ngày") !== -1 || cellContent.toLowerCase().indexOf("họ tên") !== -1) continue;
+
+                        finalData.names.push(cellContent);
+                        let v1 = r1.slice(1, 1 + numDays).map(function(v) { return parseFloat(v) || 0; });
+                        let v2_total = Array(numDays).fill(0);
+                        let nextRowIdx = i + 1;
+                        while(nextRowIdx < jsonData.length) {
+                            let nextRow = jsonData[nextRowIdx];
+                            if (nextRow && nextRow[0] && nextRow[0].toString().trim() !== "") break;
+                            if(nextRow) {
+                                for(let k = 0; k < numDays; k++) {
+                                    v2_total[k] += parseFloat(nextRow[k+1]) || 0;
+                                }
+                            }
+                            nextRowIdx++;
+                        }
+                        finalData.values.push([v1, v2_total]);
+                        currentMemberCount++;
+                        i = nextRowIdx - 1;
+                        lastIdxProcessed = nextRowIdx;
+                    }
+
+                    let teamMonthVal = 0;
+                    for(let m = lastIdxProcessed; m < jsonData.length; m++) {
+                        let row = jsonData[m];
+                        if(!row || !row[0]) continue;
+                        let firstCell = row[0].toString().toLowerCase();
+                        if(teams.some(function(tn) { return firstCell === tn.toLowerCase(); })) break;
+                        if(firstCell.indexOf("tháng") !== -1) {
+                            teamMonthVal = parseFloat(row[1]) || 0;
+                            break;
+                        }
+                    }
+                    while(finalData.names.length < 7) {
+                        finalData.names.push("Thành viên " + (finalData.names.length + 1));
+                        finalData.values.push([Array(numDays).fill(0), Array(numDays).fill(0)]);
+                    }
+                    finalData.monthTotal = teamMonthVal;
+                    localStorage.setItem("data_" + tName + "_W" + wNum, JSON.stringify(finalData));
+                }
+            });
+        });
+        renderUI();
+        alert("Đã cập nhật dữ liệu thành công!");
+    };
+    reader.readAsArrayBuffer(input.files[0]);
+}
+
+function changeBackground(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('bg-overlay').style.backgroundImage = "url('" + e.target.result + "')";
+            localStorage.setItem('custom_app_background', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+window.onload = function() {
+    const bg = localStorage.getItem('custom_app_background');
+    if(bg) document.getElementById('bg-overlay').style.backgroundImage = "url('" + bg + "')";
+    switchWeek(1, null);
+};
+</script>
+</body>
+</html>
