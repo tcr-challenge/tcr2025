@@ -42,72 +42,51 @@ body::before {
     pointer-events: none;
 }
 
-header { text-align: center; padding: 15px 10px 5px 10px; width: 100%; }
+header { text-align: center; padding: 10px 10px 5px 10px; width: 100%; }
 header h1 {
-    font-size: 40px; margin: 0; font-weight: 900;
-    text-transform: uppercase; letter-spacing: 3px; color: #ffffff;
-    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+    font-size: 36px; margin: 0; font-weight: 900;
+    text-transform: uppercase; letter-spacing: 2px; color: #ffffff;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
 }
 header h2 { 
-    font-size: 20px; margin: 5px 0; color: #ffffff; 
+    font-size: 18px; margin: 5px 0; color: #ffffff; 
     font-weight: 800; text-transform: uppercase;
-    text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000;
+    text-shadow: 0 0 5px #ff0000;
 }
 header h3 {
-    font-size: 20px; margin: 5px 0; color: #ffeb3b;
+    font-size: 18px; margin: 5px 0; color: #ffeb3b;
     font-weight: 900; text-transform: uppercase;
-    text-shadow: 0 0 15px rgba(255, 235, 59, 0.8);
-    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 235, 59, 0.8);
 }
 
 .team-outside-info { text-align: center; margin-bottom: 5px; }
 .team-outside-info h2 {
-    font-size: 65px; margin: 0; color: #ffeb3b;
+    font-size: 55px; margin: 0; color: #ffeb3b;
     text-shadow: 0 0 25px rgba(255, 235, 59, 0.9);
     font-weight: 950;
 }
 
 .week-dropdown-container {
-    display: flex; justify-content: center; margin-bottom: 25px; position: relative; z-index: 100;
-}
-.dropdown { position: relative; display: inline-block; padding-bottom: 10px; }
-
-@keyframes neon-glow {
-    0% { box-shadow: 0 0 5px #ffeb3b, 0 0 10px #ffeb3b; }
-    50% { box-shadow: 0 0 20px #ffeb3b, 0 0 40px #ffeb3b, 0 0 10px #ffffff; }
-    100% { box-shadow: 0 0 5px #ffeb3b, 0 0 10px #ffeb3b; }
+    display: flex; justify-content: center; margin-bottom: 20px; position: relative; z-index: 100;
 }
 
 .dropbtn {
-    padding: 12px 30px; border-radius: 35px; border: 3px solid #ffeb3b;
+    padding: 10px 25px; border-radius: 35px; border: 3px solid #ffeb3b;
     background: #ffeb3b; color: #000000; font-weight: 950;
     cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
-    font-size: 18px; 
-    display: flex; align-items: center; justify-content: center;
-    min-width: 220px;
-    animation: neon-glow 2s infinite ease-in-out; 
+    font-size: 16px; min-width: 220px;
     letter-spacing: 1px;
 }
 .dropdown-content {
     display: none; position: absolute; background-color: rgba(0, 0, 0, 0.95);
-    min-width: 260px; border: 2px solid #ffeb3b; border-radius: 15px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.8); z-index: 1; left: 50%;
-    transform: translateX(-50%); 
-    margin-top: 0px; 
-    overflow: hidden;
+    min-width: 250px; border: 2px solid #ffeb3b; border-radius: 15px;
+    z-index: 1; left: 50%; transform: translateX(-50%); 
 }
 .dropdown-content button {
-    color: #ffeb3b; padding: 12px 15px; text-decoration: none; display: flex; 
-    align-items: center; justify-content: flex-start; gap: 12px;
-    background: none; border: none; width: 100%; cursor: pointer;
-    font-weight: bold; text-transform: uppercase; font-size: 14px; transition: background 0.3s;
-    border-bottom: 1px solid rgba(255, 235, 59, 0.1);
+    color: #ffeb3b; padding: 12px 15px; display: flex; 
+    align-items: center; gap: 12px; background: none; border: none; width: 100%;
+    cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 14px;
 }
-.dropdown-content button .week-icon { font-size: 20px; width: 25px; text-align: center; }
-.dropdown-content button .week-label { display: flex; flex-direction: column; align-items: flex-start; }
-.dropdown-content button .week-sub { font-size: 10px; opacity: 0.7; letter-spacing: 1px; }
-
-.dropdown-content button:hover { background-color: rgba(255, 235, 59, 0.3); }
 .dropdown:hover .dropdown-content { display: block; }
 
 main { display: flex; justify-content: center; padding: 5px; width: 100%; }
@@ -115,78 +94,58 @@ main { display: flex; justify-content: center; padding: 5px; width: 100%; }
 .team-display-container {
     display: flex; align-items: flex-start; 
     background: rgba(0, 0, 0, 0.8); 
-    padding: 20px;
-    border-radius: 40px; border: 2px solid #ffeb3b;
-    box-shadow: 0 0 40px rgba(255, 235, 59, 0.3);
+    padding: 20px; border-radius: 40px; border: 2px solid #ffeb3b;
     backdrop-filter: blur(15px); 
-    width: 95%; max-width: 1450px; min-height: 850px; 
+    width: 98%; max-width: 1450px; min-height: 800px; 
     justify-content: space-between;
 }
 
-/* TỐI ƯU ẢNH LEADER: Giữ nguyên vẹn phần đầu */
-.leader-column { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 220px; flex-shrink: 0; }
-.leader-name-tag { 
-    font-size: 16px; font-weight: 800; color: #ffeb3b; 
-    text-transform: uppercase; min-height: 25px;
-    text-shadow: 0 0 10px #ffeb3b, 0 0 20px #ffeb3b;
-    display: flex; align-items: center; gap: 5px;
-}
+.leader-column { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 200px; flex-shrink: 0; }
+.leader-name-tag { font-size: 15px; font-weight: 800; color: #ffeb3b; text-transform: uppercase; }
 .leader-frame { 
-    width: 100%; 
-    height: 600px; 
-    border: 3px solid #ffeb3b; 
-    border-radius: 35px; 
-    overflow: hidden; 
-    background: rgba(255,255,255,0.05); /* Nền nhẹ để thấy khung khi ảnh nhỏ */
-    display: flex;
-    align-items: flex-start; /* Ưu tiên bắt đầu từ trên cùng */
+    width: 100%; height: 550px; border: 2px solid #ffeb3b; border-radius: 30px; 
+    overflow: hidden; background: rgba(255,255,255,0.05); display: flex;
 }
-.leader-frame img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: contain; /* HIỂN THỊ TOÀN BỘ ẢNH, KHÔNG CẮT */
-    object-position: top; /* GIỮ PHẦN ĐẦU Ở TRÊN CÙNG */
-}
+.leader-frame img { width: 100%; height: 100%; object-fit: contain; object-position: top; }
 
-.stats-table-container { flex-grow: 1; margin: 20px 15px; display: flex; flex-direction: column; align-items: center; overflow: hidden; width: 100%; }
-.table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 15px; }
+.stats-table-container { flex-grow: 1; margin: 10px 15px; display: flex; flex-direction: column; align-items: center; width: 100%; overflow: hidden; }
+.table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12px; border: 1px solid rgba(255, 235, 59, 0.4); border-radius: 5px; overflow: hidden; }
-th, td { border: 1px solid rgba(255, 235, 59, 0.2); padding: 6px 3px; text-align: center; min-width: 45px; }
-th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; font-size: 13px; }
-.row-member-group-a { background: rgba(255, 255, 255, 0.05); }
-.row-member-group-b { background: rgba(0, 0, 0, 0.3); }
+table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12px; border: 1px solid rgba(255, 235, 59, 0.4); border-radius: 5px; }
+th, td { border: 1px solid rgba(255, 235, 59, 0.2); padding: 5px 3px; text-align: center; min-width: 45px; }
+th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-size: 13px; }
 
-.leader-name-cell { font-weight: 900 !important; color: #ffeb3b !important; text-transform: uppercase; text-shadow: 0 0 8px #ffeb3b; }
-.member-name-cell { font-weight: bold; min-width: 120px; }
+.row-total-week { background: rgba(255, 235, 59, 0.2); font-weight: 900; font-size: 18px; color: #ffffff; }
+.row-total-month { background: rgba(255, 235, 59, 0.25); font-weight: 950; font-size: 24px; color: #ffffff; }
+.month-value-highlight { font-size: 28px; color: #ffeb3b; }
 
-.row-total-day { background: rgba(255, 235, 59, 0.15); font-weight: 900; color: #ffeb3b; }
-.row-total-week { background: rgba(255, 235, 59, 0.2); font-weight: 900; font-size: 20px; color: #ffffff; }
-.row-total-month { background: rgba(255, 235, 59, 0.25); font-weight: 950; font-size: 26px; color: #ffffff; }
-.month-value-highlight { font-size: 32px; color: #ffeb3b; }
-
-.controls-area { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
-.team-selector { display: flex; gap: 15px; background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 30px; border: 1px solid rgba(255,235,59,0.3); flex-wrap: wrap; justify-content: center; }
-.team-option { cursor: pointer; font-weight: bold; color: #cccccc; padding: 5px 8px; border-radius: 20px; font-size: 14px; }
+.controls-area { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; margin-top: 10px; }
+.team-selector { display: flex; gap: 10px; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 30px; border: 1px solid rgba(255,235,59,0.3); }
+.team-option { cursor: pointer; font-weight: bold; color: #cccccc; font-size: 13px; }
 .team-option input { display: none; }
-.team-option:has(input:checked) { color: #ffeb3b; transform: scale(1.1); text-shadow: 0 0 10px #ffeb3b; }
+.team-option:has(input:checked) { color: #ffeb3b; text-shadow: 0 0 10px #ffeb3b; }
 
-/* MEDIA QUERIES */
-@media (max-width: 1024px) {
-    .team-display-container { flex-direction: column; align-items: center; height: auto; }
-    .leader-column { width: 100%; max-width: 300px; margin-bottom: 20px; }
-    .leader-frame { height: 450px; } /* Giảm chiều cao trên mobile để không quá dài */
-    header h1 { font-size: 30px; }
-    .team-outside-info h2 { font-size: 50px; }
+/* --- CSS TỰ ĐỘNG KHI XOAY NGANG ĐIỆN THOẠI --- */
+@media screen and (orientation: landscape) and (max-height: 600px) {
+    header h1 { font-size: 22px; }
+    header h2, header h3 { font-size: 14px; margin: 2px 0; }
+    .team-outside-info h2 { font-size: 35px; }
+    .team-display-container { 
+        flex-direction: row !important; /* Luôn giữ hàng ngang */
+        min-height: auto; 
+        padding: 10px;
+    }
+    .leader-column { width: 120px; } /* Thu nhỏ ảnh leader để nhường chỗ cho bảng */
+    .leader-frame { height: 250px; }
+    .stats-table-container { margin: 0 10px; }
+    .table-responsive { max-height: 200px; overflow-y: auto; } /* Cho phép cuộn bảng nếu màn hình quá thấp */
+    .controls-area { flex-direction: row; justify-content: center; gap: 20px; }
 }
 
-@media (max-width: 600px) {
-    header h1 { font-size: 24px; }
-    header h2 { font-size: 16px; }
-    header h3 { font-size: 14px; }
-    .dropbtn { font-size: 16px; min-width: 200px; }
-    .team-outside-info h2 { font-size: 40px; }
-    .team-display-container { border-radius: 20px; padding: 10px; }
+/* TỐI ƯU MOBILE DỌC */
+@media screen and (max-width: 1024px) and (orientation: portrait) {
+    .team-display-container { flex-direction: column; align-items: center; }
+    .leader-column { width: 100%; max-width: 250px; margin-bottom: 15px; }
     .leader-frame { height: 350px; }
 }
 </style>
@@ -202,15 +161,13 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 
 <div class="week-dropdown-container">
     <div class="dropdown">
-        <button class="dropbtn">
-            <span id="selected-week-text">🚩 TUẦN 1: KHỞI ĐỘNG</span>
-        </button>
+        <button class="dropbtn"><span id="selected-week-text">🚩 TUẦN 1: KHỞI ĐỘNG</span></button>
         <div class="dropdown-content">
-            <button onclick="switchWeek(1, this)"><span class="week-icon">🚩</span><div class="week-label"><span>Tuần 1</span><span class="week-sub">KHỞI ĐỘNG</span></div></button>
-            <button onclick="switchWeek(2, this)"><span class="week-icon">⚡</span><div class="week-label"><span>Tuần 2</span><span class="week-sub">TĂNG TỐC</span></div></button>
-            <button onclick="switchWeek(3, this)"><span class="week-icon">🔥</span><div class="week-label"><span>Tuần 3</span><span class="week-sub">BỨT PHÁ</span></div></button>
-            <button onclick="switchWeek(4, this)"><span class="week-icon">🏆</span><div class="week-label"><span>Tuần 4</span><span class="week-sub">VỀ ĐÍCH</span></div></button>
-            <button onclick="switchWeek(5, this)"><span class="week-icon">👑</span><div class="week-label"><span>Tuần 5</span><span class="week-sub">VINH QUANG</span></div></button>
+            <button onclick="switchWeek(1, this)">🚩 Tuần 1: KHỞI ĐỘNG</button>
+            <button onclick="switchWeek(2, this)">⚡ Tuần 2: TĂNG TỐC</button>
+            <button onclick="switchWeek(3, this)">🔥 Tuần 3: BỨT PHÁ</button>
+            <button onclick="switchWeek(4, this)">🏆 Tuần 4: VỀ ĐÍCH</button>
+            <button onclick="switchWeek(5, this)">👑 Tuần 5: VINH QUANG</button>
         </div>
     </div>
 </div>
@@ -241,10 +198,8 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
                     <label class="team-option"><input type="radio" name="teamSelect" value="TEAM C" onchange="switchTeam(this.value)"><span>TEAM C</span></label>
                     <label class="team-option"><input type="radio" name="teamSelect" value="TEAM D" onchange="switchTeam(this.value)"><span>TEAM D</span></label>
                 </div>
-                <div class="btn-group">
-                    <input type="file" id="bgInput" accept="image/*" style="display:none" onchange="changeBackground(this)">
-                    <button style="background: rgba(255, 235, 59, 0.2); border: 1px solid #ffeb3b; color: #ffeb3b; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold;" onclick="document.getElementById('bgInput').click()">🖼️ Ảnh Nền</button>
-                </div>
+                <button style="background: rgba(255, 235, 59, 0.2); border: 1px solid #ffeb3b; color: #ffeb3b; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-size: 12px;" onclick="document.getElementById('bgInput').click()">🖼️ Nền</button>
+                <input type="file" id="bgInput" accept="image/*" style="display:none" onchange="changeBackground(this)">
             </div>
         </div>
 
@@ -268,19 +223,13 @@ const WEEK_DATES = {
 };
 
 const WEEK_TITLES = {
-    1: "🚩 TUẦN 1: KHỞI ĐỘNG",
-    2: "⚡ TUẦN 2: TĂNG TỐC",
-    3: "🔥 TUẦN 3: BỨT PHÁ",
-    4: "🏆 TUẦN 4: VỀ ĐÍCH",
-    5: "👑 TUẦN 5: VINH QUANG"
+    1: "🚩 TUẦN 1: KHỞI ĐỘNG", 2: "⚡ TUẦN 2: TĂNG TỐC", 3: "🔥 TUẦN 3: BỨT PHÁ", 4: "🏆 TUẦN 4: VỀ ĐÍCH", 5: "👑 TUẦN 5: VINH QUANG"
 };
 
 const DRIVE_FILE_URL = "https://docs.google.com/spreadsheets/d/1HaGQjRjU7fMVyD6zbqzbbWu-JUIjSwWcyA9_v3Kg8QE/export?format=xlsx";
 
 function switchWeek(week, btn) {
     currentWeek = week;
-    document.querySelectorAll('.dropdown-content button').forEach(b => b.classList.remove('active'));
-    if(btn) btn.classList.add('active');
     document.getElementById('selected-week-text').innerText = WEEK_TITLES[week];
     const dates = WEEK_DATES[week];
     const dateStr = "(" + dates[0] + " - " + dates[dates.length - 1] + ")";
@@ -341,7 +290,7 @@ function renderUI() {
             if (j === 0) {
                 const nameCell = document.createElement('td');
                 nameCell.rowSpan = 2;
-                nameCell.className = (i < 2) ? 'member-name-cell leader-name-cell' : 'member-name-cell';
+                nameCell.className = (i < 2) ? 'leader-name-cell' : '';
                 nameCell.innerHTML = (i < 2 ? '⭐ ' : '') + rawName;
                 row.appendChild(nameCell);
             }
@@ -349,13 +298,11 @@ function renderUI() {
                 const cell = document.createElement('td');
                 let val = (data.values[i] && data.values[i][j]) ? (parseFloat(data.values[i][j][k]) || 0) : 0;
                 cell.innerText = formatValue(val); 
-                mSum += val;
-                dayTotals[k] += val;
+                mSum += val; dayTotals[k] += val;
                 row.appendChild(cell);
             }
             const totalCell = document.createElement('td');
-            totalCell.style.fontWeight = "bold";
-            totalCell.style.color = "#ffeb3b";
+            totalCell.style.fontWeight = "bold"; totalCell.style.color = "#ffeb3b";
             if (j === 0) totalCell.id = "total-m-" + i;
             row.appendChild(totalCell);
             tbody.appendChild(row);
