@@ -77,17 +77,32 @@ header h3 {
     font-size: 16px; min-width: 220px;
     letter-spacing: 1px;
 }
+
+/* Sửa hiển thị nội dung dropdown */
 .dropdown-content {
-    display: none; position: absolute; background-color: rgba(0, 0, 0, 0.95);
-    min-width: 250px; border: 2px solid #ffeb3b; border-radius: 15px;
-    z-index: 1; left: 50%; transform: translateX(-50%); 
+    display: none; 
+    position: absolute; 
+    background-color: rgba(0, 0, 0, 0.95);
+    min-width: 250px; 
+    border: 2px solid #ffeb3b; 
+    border-radius: 15px;
+    z-index: 1000; 
+    left: 50%; 
+    transform: translateX(-50%); 
 }
+
+/* Hiển thị khi hover (trên PC) hoặc khi thêm class 'show' (trên mobile) */
+.dropdown:hover .dropdown-content,
+.dropdown-content.show {
+    display: block;
+}
+
 .dropdown-content button {
     color: #ffeb3b; padding: 12px 15px; display: flex; 
     align-items: center; gap: 12px; background: none; border: none; width: 100%;
     cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 14px;
+    border-bottom: 1px solid rgba(255, 235, 59, 0.1);
 }
-.dropdown:hover .dropdown-content { display: block; }
 
 main { display: flex; justify-content: center; padding: 5px; width: 100%; }
 
@@ -125,24 +140,19 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-size: 13px; }
 .team-option input { display: none; }
 .team-option:has(input:checked) { color: #ffeb3b; text-shadow: 0 0 10px #ffeb3b; }
 
-/* --- CSS TỰ ĐỘNG KHI XOAY NGANG ĐIỆN THOẠI --- */
+/* MEDIA QUERIES LANDSCAPE */
 @media screen and (orientation: landscape) and (max-height: 600px) {
     header h1 { font-size: 22px; }
     header h2, header h3 { font-size: 14px; margin: 2px 0; }
     .team-outside-info h2 { font-size: 35px; }
-    .team-display-container { 
-        flex-direction: row !important; /* Luôn giữ hàng ngang */
-        min-height: auto; 
-        padding: 10px;
-    }
-    .leader-column { width: 120px; } /* Thu nhỏ ảnh leader để nhường chỗ cho bảng */
+    .team-display-container { flex-direction: row !important; min-height: auto; padding: 10px; }
+    .leader-column { width: 120px; }
     .leader-frame { height: 250px; }
     .stats-table-container { margin: 0 10px; }
-    .table-responsive { max-height: 200px; overflow-y: auto; } /* Cho phép cuộn bảng nếu màn hình quá thấp */
-    .controls-area { flex-direction: row; justify-content: center; gap: 20px; }
+    .table-responsive { max-height: 200px; overflow-y: auto; }
 }
 
-/* TỐI ƯU MOBILE DỌC */
+/* PORTRAIT */
 @media screen and (max-width: 1024px) and (orientation: portrait) {
     .team-display-container { flex-direction: column; align-items: center; }
     .leader-column { width: 100%; max-width: 250px; margin-bottom: 15px; }
@@ -161,8 +171,8 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-size: 13px; }
 
 <div class="week-dropdown-container">
     <div class="dropdown">
-        <button class="dropbtn"><span id="selected-week-text">🚩 TUẦN 1: KHỞI ĐỘNG</span></button>
-        <div class="dropdown-content">
+        <button class="dropbtn" onclick="toggleDropdown()"><span id="selected-week-text">🚩 TUẦN 1: KHỞI ĐỘNG</span></button>
+        <div class="dropdown-content" id="myDropdown">
             <button onclick="switchWeek(1, this)">🚩 Tuần 1: KHỞI ĐỘNG</button>
             <button onclick="switchWeek(2, this)">⚡ Tuần 2: TĂNG TỐC</button>
             <button onclick="switchWeek(3, this)">🔥 Tuần 3: BỨT PHÁ</button>
@@ -228,13 +238,35 @@ const WEEK_TITLES = {
 
 const DRIVE_FILE_URL = "https://docs.google.com/spreadsheets/d/1HaGQjRjU7fMVyD6zbqzbbWu-JUIjSwWcyA9_v3Kg8QE/export?format=xlsx";
 
+// Hàm toggle menu cho mobile
+function toggleDropdown() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
 function switchWeek(week, btn) {
     currentWeek = week;
     document.getElementById('selected-week-text').innerText = WEEK_TITLES[week];
     const dates = WEEK_DATES[week];
     const dateStr = "(" + dates[0] + " - " + dates[dates.length - 1] + ")";
     document.getElementById('week-title').innerText = "BẢNG TỔNG KẾT TUẦN " + week + " " + dateStr;
+    
+    // Đóng dropdown ngay lập tức sau khi chọn xong
+    document.getElementById("myDropdown").classList.remove("show");
+    
     renderUI();
+}
+
+// Đóng dropdown nếu click ra ngoài
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        let dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+            let openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
 }
 
 function switchTeam(val) {
