@@ -183,43 +183,61 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 .btn-action { background: rgba(255, 235, 59, 0.2); border: 1px solid #ffeb3b; color: #ffeb3b; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
 .btn-action:hover { background: #ffeb3b; color: #000000; }
 
-/* CSS Mobile Sửa Đổi */
-@media screen and (max-width: 768px) {
+/* CSS Mobile Sửa Đổi Theo Yêu Cầu */
+@media screen and (max-width: 1024px) {
     .team-display-container {
         flex-direction: column !important;
         height: auto !important;
-        width: 95% !important;
-        padding: 15px !important;
+        width: 98% !important;
+        padding: 10px !important;
+        align-items: center !important;
     }
+    
+    /* Gom 2 cột leader lên trên bảng dữ liệu */
     .leader-column {
-        flex-direction: row !important;
+        width: 48% !important;
+        display: inline-flex !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* Container bao quanh leader trên mobile để nằm ngang */
+    .leader-wrapper-mobile {
+        display: flex !important;
         width: 100% !important;
         justify-content: center !important;
-        gap: 10px !important;
-        order: 1 !important; /* Đưa lên trên bảng */
-        margin-bottom: 15px !important;
+        gap: 15px !important;
     }
-    .leader-column .leader-name-tag {
-        font-size: 12px !important;
-    }
+
     .leader-frame {
-        width: 120px !important; /* Thu nhỏ ảnh */
-        height: 160px !important;
+        width: 140px !important;
+        height: 180px !important;
         border-radius: 15px !important;
     }
+
     .leader-frame img {
-        object-fit: contain !important; /* Hiển thị full ảnh */
+        object-fit: cover !important;
     }
+
+    .leader-name-tag {
+        font-size: 14px !important;
+    }
+
     .stats-table-container {
-        order: 2 !important;
-        margin: 0 !important;
+        margin: 10px 0 !important;
         width: 100% !important;
+        overflow-x: auto !important;
     }
+
     table {
-        font-size: 10px !important;
+        min-width: 600px !important; /* Đảm bảo bảng không quá bóp nghẹt */
+        font-size: 11px !important;
     }
-    .controls-area {
-        order: 3 !important;
+}
+
+/* Ẩn wrapper hỗ trợ mobile khi ở màn hình máy tính */
+@media screen and (min-width: 1025px) {
+    .leader-wrapper-mobile {
+        display: contents !important;
     }
 }
 </style>
@@ -269,16 +287,18 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 
 <main>
     <div class="team-display-container">
-        <div class="leader-column">
-            <div>
+        <div class="leader-wrapper-mobile">
+            <div class="leader-column">
                 <div class="leader-name-tag">⭐ <span id="name-leader1">ĐỘI TRƯỞNG 1</span></div>
                 <div class="leader-frame"><img id="img-leader1" src=""></div>
             </div>
-            <div>
+
+            <div class="leader-column" id="leader-2-mobile-pos">
                 <div class="leader-name-tag">⭐ <span id="name-leader2">ĐỘI TRƯỞNG 2</span></div>
                 <div class="leader-frame"><img id="img-leader2" src=""></div>
             </div>
         </div>
+
         <div class="stats-table-container">
             <table id="statsTable">
                 <thead id="tableHead"></thead>
@@ -297,7 +317,8 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
                 </div>
             </div>
         </div>
-    </div>
+        
+        </div>
 </main>
 
 <script>
