@@ -67,6 +67,7 @@ header h3 {
     font-weight: 950;
 }
 
+/* Nút chọn tuần: Style biểu tượng */
 .week-dropdown-container {
     display: flex; justify-content: center; margin-bottom: 25px; position: relative; z-index: 100;
 }
@@ -181,61 +182,6 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 .btn-group { display: flex; gap: 10px; }
 .btn-action { background: rgba(255, 235, 59, 0.2); border: 1px solid #ffeb3b; color: #ffeb3b; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
 .btn-action:hover { background: #ffeb3b; color: #000000; }
-
-/* Responsive cho di động và iPad */
-@media screen and (max-width: 1024px) {
-    header h1 { font-size: 28px; }
-    header h2 { font-size: 16px; }
-    header h3 { font-size: 16px; }
-    .team-outside-info h2 { font-size: 45px; }
-    .dropbtn { font-size: 16px; padding: 10px 25px; min-width: 200px; }
-    
-    .team-display-container {
-        flex-direction: column;
-        width: 98%;
-        height: auto;
-        padding: 15px;
-        align-items: center;
-    }
-
-    /* Đưa 2 đội trưởng lên trên và để sát nhau */
-    .leader-column {
-        flex-direction: row;
-        width: 100%;
-        justify-content: center;
-        gap: 15px;
-        order: -1; /* Đưa lên đầu container */
-        margin-bottom: 10px;
-    }
-    
-    .leader-column > div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 45%;
-    }
-
-    .leader-frame {
-        height: 200px; /* Thu nhỏ ảnh trên di động */
-        border-radius: 20px;
-    }
-
-    .leader-name-tag { font-size: 12px; }
-
-    .stats-table-container {
-        margin: 10px 0;
-        width: 100%;
-    }
-
-    table { font-size: 10px; }
-    th { font-size: 11px; padding: 4px 2px; }
-    td { padding: 4px 2px; }
-    
-    .row-total-week { font-size: 16px; }
-    .row-total-month { font-size: 18px; }
-    .month-value-highlight { font-size: 24px; }
-    .col-member-total { font-size: 12px; }
-}
 </style>
 </head>
 <body id="capture-area">
@@ -284,16 +230,9 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 <main>
     <div class="team-display-container">
         <div class="leader-column">
-            <div>
-                <div class="leader-name-tag">⭐ <span id="name-leader1">ĐỘI TRƯỞNG 1</span></div>
-                <div class="leader-frame"><img id="img-leader1" src=""></div>
-            </div>
-            <div>
-                <div class="leader-name-tag">⭐ <span id="name-leader2">ĐỘI TRƯỞNG 2</span></div>
-                <div class="leader-frame"><img id="img-leader2" src=""></div>
-            </div>
+            <div class="leader-name-tag">⭐ <span id="name-leader1">ĐỘI TRƯỞNG 1</span></div>
+            <div class="leader-frame"><img id="img-leader1" src=""></div>
         </div>
-
         <div class="stats-table-container">
             <table id="statsTable">
                 <thead id="tableHead"></thead>
@@ -311,6 +250,10 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
                     <button class="btn-action" onclick="document.getElementById('bgInput').click()">🖼️ Chọn Ảnh Nền</button>
                 </div>
             </div>
+        </div>
+        <div class="leader-column">
+            <div class="leader-name-tag">⭐ <span id="name-leader2">ĐỘI TRƯỞNG 2</span></div>
+            <div class="leader-frame"><img id="img-leader2" src=""></div>
         </div>
     </div>
 </main>
