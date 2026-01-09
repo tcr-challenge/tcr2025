@@ -135,8 +135,8 @@ main { display: flex; justify-content: center; padding: 5px; }
     text-shadow: 0 0 10px #ffeb3b, 0 0 20px #ffeb3b;
     display: flex; align-items: center; gap: 5px;
 }
-.leader-frame { width: 100%; height: 650px; border: 3px solid #ffeb3b; border-radius: 40px; overflow: hidden; background: rgba(0,0,0,0.5); }
-.leader-frame img { width: 100%; height: 100%; object-fit: contain; } /* Thay đổi từ cover thành contain */
+.leader-frame { width: 100%; height: 650px; border: 3px solid #ffeb3b; border-radius: 40px; overflow: hidden; }
+.leader-frame img { width: 100%; height: 100%; object-fit: cover; }
 
 .stats-table-container { flex-grow: 1; margin: 35px 20px 0 20px; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
 
@@ -198,12 +198,13 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
         align-items: center;
     }
 
+    /* Đưa 2 đội trưởng lên trên và để sát nhau */
     .leader-column {
         flex-direction: row;
         width: 100%;
         justify-content: center;
         gap: 15px;
-        order: -1;
+        order: -1; /* Đưa lên đầu container */
         margin-bottom: 10px;
     }
     
@@ -215,7 +216,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
     }
 
     .leader-frame {
-        height: 200px; 
+        height: 200px; /* Thu nhỏ ảnh trên di động */
         border-radius: 20px;
     }
 
