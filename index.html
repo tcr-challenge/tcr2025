@@ -182,64 +182,6 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 .btn-group { display: flex; gap: 10px; }
 .btn-action { background: rgba(255, 235, 59, 0.2); border: 1px solid #ffeb3b; color: #ffeb3b; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
 .btn-action:hover { background: #ffeb3b; color: #000000; }
-
-/* CSS Mobile Sửa Đổi Theo Yêu Cầu */
-@media screen and (max-width: 1024px) {
-    .team-display-container {
-        flex-direction: column !important;
-        height: auto !important;
-        width: 98% !important;
-        padding: 10px !important;
-        align-items: center !important;
-    }
-    
-    /* Gom 2 cột leader lên trên bảng dữ liệu */
-    .leader-column {
-        width: 48% !important;
-        display: inline-flex !important;
-        margin-bottom: 10px !important;
-    }
-
-    /* Container bao quanh leader trên mobile để nằm ngang */
-    .leader-wrapper-mobile {
-        display: flex !important;
-        width: 100% !important;
-        justify-content: center !important;
-        gap: 15px !important;
-    }
-
-    .leader-frame {
-        width: 140px !important;
-        height: 180px !important;
-        border-radius: 15px !important;
-    }
-
-    .leader-frame img {
-        object-fit: cover !important;
-    }
-
-    .leader-name-tag {
-        font-size: 14px !important;
-    }
-
-    .stats-table-container {
-        margin: 10px 0 !important;
-        width: 100% !important;
-        overflow-x: auto !important;
-    }
-
-    table {
-        min-width: 600px !important; /* Đảm bảo bảng không quá bóp nghẹt */
-        font-size: 11px !important;
-    }
-}
-
-/* Ẩn wrapper hỗ trợ mobile khi ở màn hình máy tính */
-@media screen and (min-width: 1025px) {
-    .leader-wrapper-mobile {
-        display: contents !important;
-    }
-}
 </style>
 </head>
 <body id="capture-area">
@@ -287,18 +229,10 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 
 <main>
     <div class="team-display-container">
-        <div class="leader-wrapper-mobile">
-            <div class="leader-column">
-                <div class="leader-name-tag">⭐ <span id="name-leader1">ĐỘI TRƯỞNG 1</span></div>
-                <div class="leader-frame"><img id="img-leader1" src=""></div>
-            </div>
-
-            <div class="leader-column" id="leader-2-mobile-pos">
-                <div class="leader-name-tag">⭐ <span id="name-leader2">ĐỘI TRƯỞNG 2</span></div>
-                <div class="leader-frame"><img id="img-leader2" src=""></div>
-            </div>
+        <div class="leader-column">
+            <div class="leader-name-tag">⭐ <span id="name-leader1">ĐỘI TRƯỞNG 1</span></div>
+            <div class="leader-frame"><img id="img-leader1" src=""></div>
         </div>
-
         <div class="stats-table-container">
             <table id="statsTable">
                 <thead id="tableHead"></thead>
@@ -317,8 +251,11 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
                 </div>
             </div>
         </div>
-        
+        <div class="leader-column">
+            <div class="leader-name-tag">⭐ <span id="name-leader2">ĐỘI TRƯỞNG 2</span></div>
+            <div class="leader-frame"><img id="img-leader2" src=""></div>
         </div>
+    </div>
 </main>
 
 <script>
