@@ -167,62 +167,68 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 
 /* CSS DÀNH RIÊNG CHO DI ĐỘNG */
 @media screen and (max-width: 768px) {
-    header h1 { font-size: 22px; }
-    header h2 { font-size: 12px; }
-    header h3 { font-size: 14px; }
-    .team-outside-info h2 { font-size: 35px; }
+    header h1 { font-size: 18px; letter-spacing: 1px; }
+    header h2 { font-size: 11px; }
+    header h3 { font-size: 12px; }
+    .team-outside-info h2 { font-size: 30px; }
     
-    .week-dropdown-container { gap: 5px; margin-bottom: 15px; }
-    .nav-arrow { width: 35px; height: 35px; font-size: 20px; }
-    .dropbtn { min-width: 220px; font-size: 14px; padding: 10px 20px; }
+    .week-dropdown-container { gap: 8px; margin-bottom: 10px; }
+    .nav-arrow { width: 30px; height: 30px; font-size: 16px; }
+    .dropbtn { min-width: 180px; font-size: 12px; padding: 8px 15px; border-radius: 20px; }
 
-    /* Container di động: Cho phép các item xếp chồng hoặc cạnh nhau */
     .team-display-container {
-        flex-direction: row; /* Để 2 leader có thể nằm cạnh nhau */
+        flex-direction: row; 
         flex-wrap: wrap;
-        width: 98%;
+        width: 100%;
         height: auto;
-        padding: 15px 10px;
+        padding: 10px 5px;
         justify-content: center;
-        gap: 10px;
+        gap: 5px;
+        border-radius: 20px;
     }
 
-    /* Avatar đội trưởng trên mobile */
     .leader-column { 
         width: 45%; 
-        order: 1; /* Cả 2 leader nhảy lên đầu */
+        order: 1; 
     }
     
-    .leader-name-tag { font-size: 10px; text-align: center; justify-content: center; }
+    .leader-name-tag { font-size: 9px; gap: 2px; }
     
     .leader-frame { 
-        height: 110px; 
-        width: 110px; 
-        border-radius: 20px; /* Avatar vuông bo tròn */
+        height: 90px; 
+        width: 90px; 
+        border-radius: 15px; 
         border-width: 2px;
-        margin: 0 auto;
     }
-    .leader-frame img {
-        object-position: top; /* Tập trung lấy từ đầu xuống */
-    }
+    .leader-frame img { object-position: top; }
 
-    /* Bảng dữ liệu nhảy xuống dưới */
     .stats-table-container { 
         width: 100%; 
-        margin: 15px 0; 
+        margin: 10px 0; 
         order: 2; 
-        overflow-x: auto; 
+        overflow-x: hidden; /* Tránh scroll ngang nếu có thể */
     }
     
-    table { font-size: 9px; }
-    th, td { padding: 3px 1px; }
-    .row-total-week { font-size: 14px; }
-    .row-total-month { font-size: 18px; }
-    .month-value-highlight { font-size: 20px; }
+    table { font-size: 8.5px; margin-bottom: 8px; }
+    th, td { padding: 3px 0.5px; letter-spacing: -0.5px; }
+    th { font-size: 9px; }
+    
+    .row-total-week { font-size: 12px; }
+    .row-total-month { font-size: 14px; }
+    .month-value-highlight { font-size: 16px; }
+    .col-member-total { font-size: 10px; }
 
-    /* Controls nhảy xuống cuối cùng */
-    .controls-area { order: 3; width: 100%; }
-    .team-selector { flex-wrap: wrap; justify-content: center; gap: 5px; padding: 8px; }
+    .controls-area { order: 3; width: 100%; gap: 5px; }
+    .team-selector { 
+        gap: 8px; 
+        padding: 5px 10px; 
+        border-radius: 15px;
+        width: 95%;
+        justify-content: space-around;
+    }
+    .team-option { font-size: 10px; padding: 2px 5px; }
+    .team-option:has(input:checked) { transform: scale(1.1); }
+    .btn-action { font-size: 11px; padding: 4px 10px; }
 }
 </style>
 </head>
@@ -351,7 +357,7 @@ function renderUI() {
 
     let headHtml = "<tr><th>Họ Tên</th>";
     dates.forEach(function(d) { headHtml += "<th>" + d + "</th>"; });
-    headHtml += "<th style='width: 80px;'>TỔNG</th></tr>";
+    headHtml += "<th style='width: 50px;'>TỔNG</th></tr>";
     thead.innerHTML = headHtml;
 
     if (!stored) {
