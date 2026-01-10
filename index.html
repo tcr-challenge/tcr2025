@@ -336,7 +336,7 @@ let currentTeam = "TEAM A", currentWeek = 1;
 const WEEK_DATES = { 1: ["23/12", "24/12", "25/12", "26/12", "27/12", "28/12"], 2: ["29/12", "30/12", "31/12", "01/01", "02/01", "03/01", "04/01"], 3: ["05/01", "06/01", "07/01", "08/01", "09/01", "10/01", "11/01"], 4: ["12/01", "13/01", "14/01", "15/01", "16/01", "17/01", "18/01"], 5: ["19/01", "20/01", "21/01", "22/01"] };
 const WEEK_TITLES = { 1: "🚩 TUẦN 1: KHỞI ĐỘNG", 2: "⚡ TUẦN 2: TĂNG TỐC", 3: "🔥 TUẦN 3: BỨT PHÁ", 4: "🏆 TUẦN 4: VỀ ĐÍCH", 5: "👑 TUẦN 5: VINH QUANG" };
 const WEEK_RANGE_TEXT = { 1: "(23/12/2025 đến 28/12/2025)", 2: "(29/12/2025 đến 04/01/2026)", 3: "(05/01/2026 đến 11/01/2026)", 4: "(12/01/2026 đến 18/01/2026)", 5: "(19/01/2026 đến 22/01/2026)" };
-const DRIVE_FILE_URL = "";
+const DRIVE_FILE_URL = "https://docs.google.com/spreadsheets/d/1SUHiQixRuR2qZ4bFMfUW-T6PdHyEhrsv/export?format=xlsx";
 
 function changeWeek(s) { let n = currentWeek + s; if (n >= 1 && n <= 5) switchWeek(n); }
 function switchWeek(w) { currentWeek = w; document.getElementById('selected-week-text').innerText = WEEK_TITLES[w]; document.getElementById('selected-week-dates').innerText = WEEK_RANGE_TEXT[w]; renderUI(); }
@@ -424,3 +424,4 @@ window.onload = () => {
 </script>
 </body>
 </html>
+
