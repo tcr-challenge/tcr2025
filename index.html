@@ -34,8 +34,8 @@
 
 /* HIỆU ỨNG HOA ĐÀO RƠI */
 .sakura {
-    position: fixed; top: -10%; z-index: 999; pointer-events: none;
-    background: #ffb7c5; opacity: 0.8; border-radius: 50% 0 50% 50%;
+    position: fixed; top: -10%; z-index: 9999; pointer-events: none;
+    background: #ffb7c5; opacity: 0.8;
     animation: fall linear infinite, sway ease-in-out infinite;
 }
 @keyframes fall { 0% { top: -10%; } 100% { top: 110%; } }
@@ -94,98 +94,32 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 .icon-btn { cursor: pointer; color: #ffeb3b; font-size: 18px; display: flex; align-items: center; justify-content: center; opacity: 0.8; transition: 0.3s; }
 .icon-btn:hover { opacity: 1; transform: scale(1.1); }
 
-/* --- PHẦN CHƠI NHẠC - BỎ KHUNG --- */
-.music-center-controller { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 400px; display: flex; flex-direction: column; align-items: center; gap: 5px; z-index: 10; padding: 10px; }
+/* --- PHẦN CHƠI NHẠC --- */
+.music-center-controller { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 350px; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 10; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 25px; border: 1px solid rgba(255,235,59,0.3); }
 .music-btns { display: flex; align-items: center; gap: 25px; }
 .music-btn { cursor: pointer; color: #ffeb3b; font-size: 18px; transition: 0.3s; display: flex; align-items: center; justify-content: center; user-select: none; }
 .music-btn:hover { transform: scale(1.2); }
 .progress-container { width: 100%; display: flex; align-items: center; gap: 10px; font-size: 10px; color: #ffeb3b; position: relative; }
-#progress-bar { flex-grow: 1; height: 3px; background: rgba(255,235,59,0.2); border-radius: 2px; cursor: pointer; position: relative; }
-#progress-fill { height: 100%; background: #ffeb3b; width: 0%; border-radius: 2px; z-index: 3; position: relative; }
-/* Sóng nhạc đứng trên đường line */
-.wave-container { position: absolute; width: 100%; height: 20px; bottom: 3px; left: 0; display: flex; align-items: flex-end; justify-content: space-around; pointer-events: none; z-index: 1; }
-.wave-bar { width: 2px; background: #ffeb3b; border-radius: 1px; height: 2px; transition: height 0.15s ease; opacity: 0.6; }
+#progress-bar { flex-grow: 1; height: 4px; background: rgba(255,235,59,0.2); border-radius: 2px; cursor: pointer; position: relative; display: flex; align-items: flex-end; }
+#progress-fill { height: 100%; background: #ffeb3b; width: 0%; border-radius: 2px; z-index: 2; position: relative; }
+.wave-container { position: absolute; width: 100%; height: 12px; bottom: 0; left: 0; display: flex; align-items: flex-end; justify-content: space-around; pointer-events: none; z-index: 1; opacity: 0.6; }
+.wave-bar { width: 2px; background: #ffeb3b; border-radius: 1px; height: 3px; transition: height 0.2s ease; }
 .song-info-display { width: 100%; overflow: hidden; height: 18px; position: relative; text-align: center; }
-#song-name-center { font-size: 12px; color: #ffeb3b; white-space: nowrap; position: absolute; width: 100%; font-weight: 600; opacity: 0.8; }
+#song-name-center { font-size: 12px; color: #ffeb3b; white-space: nowrap; position: absolute; width: 100%; font-weight: 600; }
 
-/* --- MEDIA QUERY CHO DI ĐỘNG (MOBILE) --- */
 @media screen and (max-width: 768px) {
-    header h1 { font-size: 14px; }
-    header h2 { font-size: 9px; }
-    header h3 { font-size: 10px; }
-    .team-outside-info h2 { font-size: 28px; }
-    .dropbtn { min-width: 140px; font-size: 11px; }
-
-    .team-display-container {
-        flex-direction: row; 
-        flex-wrap: wrap;
-        width: 100%; 
-        height: auto; 
-        padding: 5px; 
-        border-radius: 5px;
-        justify-content: center;
-        background: rgba(0, 0, 0, 0.9);
-    }
-
-    /* Đội trưởng đứng hàng trên, bỏ khung, mask mờ dần phần đuôi */
-    .leader-column {
-        display: flex !important;
-        flex-direction: column;
-        width: 49% !important; 
-        order: 1;
-        margin-bottom: -15px; 
-        z-index: 1;
-    }
-    
-    .leader-name-tag {
-        order: -1;
-        font-size: 9px;
-        min-height: 20px;
-        margin-bottom: 2px;
-        z-index: 2;
-        background: rgba(0,0,0,0.4);
-        border-radius: 5px;
-        padding: 0 5px;
-    }
-
-    .leader-frame {
-        width: 100%;
-        height: 180px; 
-        border: none !important;
-        border-radius: 0;
-        overflow: visible;
-        background: none;
-        -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%);
-        mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%);
-    }
-    .leader-frame img {
-        object-fit: cover; 
-        object-position: top;
-        width: 100%;
-        height: 100%;
-    }
-
-    .stats-table-container {
-        order: 2;
-        width: 100% !important;
-        margin: 0;
-        z-index: 5; 
-        background: rgba(0, 0, 0, 0.7);
-        border-radius: 10px;
-        padding-top: 5px;
-    }
-
-    table { 
-        font-size: 7.5px; 
-        width: 100%;
-        table-layout: fixed;
-    }
-
-    th, td { padding: 2px 1px; }
-
-    .team-selector { scale: 0.7; padding: 2px; margin-bottom: 2px; }
-    .music-center-controller { width: 100%; scale: 0.65; margin-top: 5px; position: relative; left: 0; transform: none; }
-    .corner-controls { scale: 0.55; top: 2px; right: 2px; left: auto; bottom: auto; }
+    header h1 { font-size: 18px; }
+    header h2 { font-size: 11px; }
+    header h3 { font-size: 12px; }
+    .team-outside-info h2 { font-size: 30px; }
+    .dropbtn { min-width: 220px; font-size: 12px; padding: 8px 15px; }
+    .team-display-container { flex-direction: row; flex-wrap: wrap; width: 100%; height: auto; padding: 10px 5px; justify-content: center; gap: 5px; }
+    .leader-column { width: 45%; order: 1; }
+    .leader-frame { height: 90px; width: 90px; border-radius: 15px; }
+    .stats-table-container { width: 100%; margin: 10px 0; order: 2; overflow-x: hidden; }
+    table { font-size: 8.5px; }
+    .corner-controls { bottom: 10px; left: 10px; scale: 0.8; transform-origin: left bottom; }
+    .music-center-controller { width: 90%; bottom: 10px; scale: 0.8; }
 }
 </style>
 </head>
@@ -195,7 +129,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
     <div class="login-box">
         <h2>LOGIN TCR</h2>
         <input type="text" id="username" placeholder="User Name">
-        <input type="password" id="password" placeholder="Password" onkeydown="if(event.key === 'Enter') checkLogin()">
+        <input type="password" id="password" placeholder="Password">
         <button onclick="checkLogin()">Đăng Nhập</button>
         <p id="login-err" style="color: #ff5252; font-size: 12px; margin-top: 10px; display: none;">Sai tên đăng nhập hoặc mật khẩu!</p>
     </div>
@@ -225,7 +159,6 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
             <div class="leader-name-tag"><span>⭐</span><span id="name-leader1">LEADER 1</span></div>
             <div class="leader-frame"><img id="img-leader1" src=""></div>
         </div>
-        
         <div class="stats-table-container">
             <div class="controls-area">
                 <div class="team-selector">
@@ -238,7 +171,6 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
             
             <table id="statsTable"><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table>
         </div>
-
         <div class="leader-column">
             <div class="leader-name-tag"><span>⭐</span><span id="name-leader2">LEADER 2</span></div>
             <div class="leader-frame"><img id="img-leader2" src=""></div>
@@ -260,7 +192,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
                     <div id="progress-fill"></div>
                     <div class="wave-container" id="wave-container">
                         <script>
-                            for(let i=0; i<40; i++) document.write('<div class="wave-bar"></div>');
+                            for(let i=0; i<30; i++) document.write('<div class="wave-bar"></div>');
                         </script>
                     </div>
                 </div>
@@ -272,7 +204,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
         </div>
 
         <input type="file" id="bgInput" accept="image/*" style="display:none" onchange="changeBackground(this)">
-        <audio id="bgMusic" onplay="updateUI(true)" onpause="updateUI(false)" onended="playRandomSong()" ontimeupdate="updateProgress()"></audio>
+        <audio id="bgMusic" onplay="updateUI(true)" onpause="updateUI(false)" onended="nextSong()" ontimeupdate="updateProgress()"></audio>
     </div>
 </main>
 
@@ -284,16 +216,8 @@ const songList = [
     { title: "Bài hát 3", file: "music/song3.mp3" },
     { title: "Nhạc Tết Sôi Động", file: "music/tet.mp3" }
 ];
-let currentSongIndex = -1;
+let currentSongIndex = 0;
 let waveInterval;
-
-function playRandomSong() {
-    let nextIndex;
-    do {
-        nextIndex = Math.floor(Math.random() * songList.length);
-    } while (nextIndex === currentSongIndex && songList.length > 1);
-    playSong(nextIndex);
-}
 
 function playSong(index) {
     const audio = document.getElementById('bgMusic');
@@ -306,8 +230,15 @@ function playSong(index) {
     audio.play().catch(e => console.log("Phát nhạc thất bại."));
 }
 
-function nextSong() { playRandomSong(); }
-function prevSong() { playRandomSong(); }
+function nextSong() {
+    let nextIndex = (currentSongIndex + 1) % songList.length;
+    playSong(nextIndex);
+}
+
+function prevSong() {
+    let prevIndex = (currentSongIndex - 1 + songList.length) % songList.length;
+    playSong(prevIndex);
+}
 
 function updateUI(isPlaying) {
     const btn = document.getElementById('playPauseBtnCenter');
@@ -325,7 +256,7 @@ function startWaves() {
     const bars = document.querySelectorAll('.wave-bar');
     waveInterval = setInterval(() => {
         bars.forEach(bar => {
-            const height = Math.random() * 12 + 2; 
+            const height = Math.random() * 8 + 3; // Sóng thấp từ 3px đến 11px
             bar.style.height = height + 'px';
         });
     }, 150);
@@ -334,12 +265,12 @@ function startWaves() {
 function stopWaves() {
     clearInterval(waveInterval);
     const bars = document.querySelectorAll('.wave-bar');
-    bars.forEach(bar => bar.style.height = '2px');
+    bars.forEach(bar => bar.style.height = '3px');
 }
 
 function toggleMusic() {
     const audio = document.getElementById('bgMusic');
-    if (audio.paused) { if(!audio.src) playRandomSong(); else audio.play(); } 
+    if (audio.paused) { if(!audio.src) playSong(0); else audio.play(); } 
     else { audio.pause(); }
 }
 
@@ -374,16 +305,19 @@ function formatTime(seconds) {
 function createSakura() {
     const sakura = document.createElement('div');
     sakura.className = 'sakura';
-    const size = Math.random() * 10 + 10 + 'px';
+    const shapes = ['50% 0 50% 50%', '50% 50% 0 50%', '20% 80% 20% 80%'];
+    sakura.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+    const size = Math.random() * 7 + 6 + 'px';
     sakura.style.width = size;
-    sakura.style.height = size;
+    sakura.style.height = (parseFloat(size) * (Math.random() * 0.5 + 0.8)) + 'px';
     sakura.style.left = Math.random() * 100 + 'vw';
-    const fallDuration = Math.random() * 5 + 8 + 's';
+    const fallDuration = Math.random() * 5 + 7 + 's';
     sakura.style.animationDuration = `${fallDuration}, ${Math.random() * 2 + 3}s`;
+    sakura.style.animationDelay = `-${Math.random() * 10}s`;
     document.body.appendChild(sakura);
-    setTimeout(() => { sakura.remove(); }, parseFloat(fallDuration) * 1000);
+    setTimeout(() => { sakura.remove(); }, fallDuration * 1000);
 }
-setInterval(createSakura, 600);
+setInterval(createSakura, 500);
 
 const _u = "VENS"; const _p = "MQ==";
 function checkLogin() {
@@ -391,10 +325,11 @@ function checkLogin() {
     const p = document.getElementById('password').value;
     if (btoa(u.toUpperCase()) === _u && btoa(p) === _p) {
         document.getElementById('login-overlay').style.display = 'none';
-        localStorage.setItem('tcr_auth_persist', 'true');
-        playRandomSong();
+        sessionStorage.setItem('tcr_auth', 'true');
+        playSong(Math.floor(Math.random() * songList.length));
     } else { document.getElementById('login-err').style.display = 'block'; }
 }
+if (sessionStorage.getItem('tcr_auth') === 'true') document.getElementById('login-overlay').style.display = 'none';
 
 let currentTeam = "TEAM A", currentWeek = 1;
 const WEEK_DATES = { 1: ["23/12", "24/12", "25/12", "26/12", "27/12", "28/12"], 2: ["29/12", "30/12", "31/12", "01/01", "02/01", "03/01", "04/01"], 3: ["05/01", "06/01", "07/01", "08/01", "09/01", "10/01", "11/01"], 4: ["12/01", "13/01", "14/01", "15/01", "16/01", "17/01", "18/01"], 5: ["19/01", "20/01", "21/01", "22/01"] };
@@ -407,8 +342,11 @@ function switchWeek(w) { currentWeek = w; document.getElementById('selected-week
 function switchTeam(v) { currentTeam = v; document.getElementById('display-team-name').innerText = v; renderUI(); }
 function formatFileName(n) { return n.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/\s+/g, "").toLowerCase(); }
 
+// Hàm render dữ liệu với logic làm mờ số 0
 function formatValueCell(n) { 
-    if (n === 0 || isNaN(n)) { return `<span class="zero-value">0</span>`; }
+    if (n === 0 || isNaN(n)) {
+        return `<span class="zero-value">0</span>`;
+    }
     return n.toLocaleString('vi-VN');
 }
 
@@ -461,6 +399,7 @@ async function loadData() {
                         let r = json[idx+1+i*2]; if(!r) break;
                         d.names.push(r[0]); d.values.push([r.slice(1,1+numDays), json[idx+2+i*2].slice(1,1+numDays)]);
                     }
+                    // Tính monthTotal (ở ví dụ này giả định lấy từ cell cụ thể nếu có hoặc tính toán)
                     d.monthTotal = d.values.reduce((acc, curr) => acc + curr[0].reduce((a,b)=>a+(b||0),0) + curr[1].reduce((a,b)=>a+(b||0),0), 0);
                     localStorage.setItem(`data_${t}_W${w}`, JSON.stringify(d));
                 }
@@ -481,13 +420,6 @@ function changeBackground(i) {
 window.onload = () => {
     const bg = localStorage.getItem('bg_tcr');
     if(bg) document.getElementById('bg-overlay').style.backgroundImage = `url(${bg})`;
-    
-    // Kiểm tra đăng nhập cũ
-    if (localStorage.getItem('tcr_auth_persist') === 'true') {
-        document.getElementById('login-overlay').style.display = 'none';
-        playRandomSong();
-    }
-    
     loadData(); switchWeek(1);
 };
 </script>
