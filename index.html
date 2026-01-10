@@ -164,6 +164,66 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 .btn-group { display: flex; gap: 10px; }
 .btn-action { background: rgba(255, 235, 59, 0.2); border: 1px solid #ffeb3b; color: #ffeb3b; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
 .btn-action:hover { background: #ffeb3b; color: #000000; }
+
+/* CSS DÀNH RIÊNG CHO DI ĐỘNG */
+@media screen and (max-width: 768px) {
+    header h1 { font-size: 22px; }
+    header h2 { font-size: 12px; }
+    header h3 { font-size: 14px; }
+    .team-outside-info h2 { font-size: 35px; }
+    
+    .week-dropdown-container { gap: 5px; margin-bottom: 15px; }
+    .nav-arrow { width: 35px; height: 35px; font-size: 20px; }
+    .dropbtn { min-width: 220px; font-size: 14px; padding: 10px 20px; }
+
+    /* Container di động: Cho phép các item xếp chồng hoặc cạnh nhau */
+    .team-display-container {
+        flex-direction: row; /* Để 2 leader có thể nằm cạnh nhau */
+        flex-wrap: wrap;
+        width: 98%;
+        height: auto;
+        padding: 15px 10px;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    /* Avatar đội trưởng trên mobile */
+    .leader-column { 
+        width: 45%; 
+        order: 1; /* Cả 2 leader nhảy lên đầu */
+    }
+    
+    .leader-name-tag { font-size: 10px; text-align: center; justify-content: center; }
+    
+    .leader-frame { 
+        height: 110px; 
+        width: 110px; 
+        border-radius: 20px; /* Avatar vuông bo tròn */
+        border-width: 2px;
+        margin: 0 auto;
+    }
+    .leader-frame img {
+        object-position: top; /* Tập trung lấy từ đầu xuống */
+    }
+
+    /* Bảng dữ liệu nhảy xuống dưới */
+    .stats-table-container { 
+        width: 100%; 
+        margin: 15px 0; 
+        order: 2; 
+        overflow-x: auto; 
+    }
+    
+    table { font-size: 9px; }
+    th, td { padding: 3px 1px; }
+    .row-total-week { font-size: 14px; }
+    .row-total-month { font-size: 18px; }
+    .month-value-highlight { font-size: 20px; }
+
+    /* Controls nhảy xuống cuối cùng */
+    .controls-area { order: 3; width: 100%; }
+    .team-selector { flex-wrap: wrap; justify-content: center; gap: 5px; padding: 8px; }
+}
 </style>
 </head>
 <body id="capture-area">
@@ -193,6 +253,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
             <div class="leader-name-tag">⭐ <span id="name-leader1">ĐỘI TRƯỞNG 1</span></div>
             <div class="leader-frame"><img id="img-leader1" src=""></div>
         </div>
+
         <div class="stats-table-container">
             <table id="statsTable">
                 <thead id="tableHead"></thead>
@@ -211,6 +272,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
                 </div>
             </div>
         </div>
+
         <div class="leader-column">
             <div class="leader-name-tag">⭐ <span id="name-leader2">ĐỘI TRƯỞNG 2</span></div>
             <div class="leader-frame"><img id="img-leader2" src=""></div>
