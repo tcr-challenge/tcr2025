@@ -69,9 +69,8 @@ header h3 {
 
 /* Nút chọn tuần: Style biểu tượng */
 .week-dropdown-container {
-    display: flex; justify-content: center; margin-bottom: 25px; position: relative; z-index: 100;
+    display: flex; justify-content: center; margin-bottom: 25px; position: relative; z-index: 100; align-items: center; gap: 15px;
 }
-.dropdown { position: relative; display: inline-block; padding-bottom: 10px; }
 
 @keyframes neon-glow {
     0% { box-shadow: 0 0 5px #ffeb3b, 0 0 10px #ffeb3b; }
@@ -82,39 +81,22 @@ header h3 {
 .dropbtn {
     padding: 15px 40px; border-radius: 35px; border: 3px solid #ffeb3b;
     background: #ffeb3b; color: #000000; font-weight: 950;
-    cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
+    transition: all 0.3s ease; text-transform: uppercase;
     font-size: 22px; 
     display: flex; align-items: center; justify-content: center;
-    min-width: 250px;
+    min-width: 350px;
     animation: neon-glow 2s infinite ease-in-out; 
     letter-spacing: 1px;
 }
-.dropdown-content {
-    display: none; position: absolute; background-color: rgba(0, 0, 0, 0.95);
-    min-width: 280px; border: 2px solid #ffeb3b; border-radius: 15px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.8); z-index: 1; left: 50%;
-    transform: translateX(-50%); 
-    margin-top: 0px; 
-    overflow: hidden;
-}
-.dropdown-content button {
-    color: #ffeb3b; padding: 15px 20px; text-decoration: none; display: flex; 
-    align-items: center; justify-content: flex-start; gap: 15px;
-    background: none; border: none; width: 100%; cursor: pointer;
-    font-weight: bold; text-transform: uppercase; font-size: 15px; transition: background 0.3s;
-    border-bottom: 1px solid rgba(255, 235, 59, 0.1);
-}
-.dropdown-content button .week-icon { font-size: 22px; width: 30px; text-align: center; }
-.dropdown-content button .week-label { display: flex; flex-direction: column; align-items: flex-start; }
-.dropdown-content button .week-sub { font-size: 11px; opacity: 0.7; letter-spacing: 1px; }
 
-.dropdown-content button:hover { background-color: rgba(255, 235, 59, 0.3); }
-.dropdown-content button.active { background: #ffeb3b; color: #000000; }
-.dropdown:hover .dropdown-content { display: block; }
-.dropdown:hover .dropbtn { 
-    transform: scale(1.05);
-    background: #ffffff;
-    border-color: #ffffff;
+.nav-arrow {
+    background: none; border: 2px solid #ffeb3b; color: #ffeb3b;
+    font-size: 30px; cursor: pointer; width: 50px; height: 50px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease; font-weight: bold;
+}
+.nav-arrow:hover {
+    background: #ffeb3b; color: #000000; box-shadow: 0 0 15px #ffeb3b;
 }
 
 main { display: flex; justify-content: center; padding: 5px; }
@@ -194,33 +176,11 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 </header>
 
 <div class="week-dropdown-container">
-    <div class="dropdown">
-        <button class="dropbtn">
-            <span id="selected-week-text">🚩 TUẦN 1: KHỞI ĐỘNG</span>
-        </button>
-        <div class="dropdown-content">
-            <button onclick="switchWeek(1, this)">
-                <span class="week-icon">🚩</span>
-                <div class="week-label"><span>Tuần 1</span><span class="week-sub">KHỞI ĐỘNG</span></div>
-            </button>
-            <button onclick="switchWeek(2, this)">
-                <span class="week-icon">⚡</span>
-                <div class="week-label"><span>Tuần 2</span><span class="week-sub">TĂNG TỐC</span></div>
-            </button>
-            <button onclick="switchWeek(3, this)">
-                <span class="week-icon">🔥</span>
-                <div class="week-label"><span>Tuần 3</span><span class="week-sub">BỨT PHÁ</span></div>
-            </button>
-            <button onclick="switchWeek(4, this)">
-                <span class="week-icon">🏆</span>
-                <div class="week-label"><span>Tuần 4</span><span class="week-sub">VỀ ĐÍCH</span></div>
-            </button>
-            <button onclick="switchWeek(5, this)">
-                <span class="week-icon">👑</span>
-                <div class="week-label"><span>Tuần 5</span><span class="week-sub">VINH QUANG</span></div>
-            </button>
-        </div>
+    <button class="nav-arrow" onclick="changeWeek(-1)">❮</button>
+    <div class="dropbtn">
+        <span id="selected-week-text">🚩 TUẦN 1: KHỞI ĐỘNG</span>
     </div>
+    <button class="nav-arrow" onclick="changeWeek(1)">❯</button>
 </div>
 
 <div class="team-outside-info">
@@ -280,11 +240,15 @@ const WEEK_TITLES = {
 
 const DRIVE_FILE_URL = "https://docs.google.com/spreadsheets/d/1SUHiQixRuR2qZ4bFMfUW-T6PdHyEhrsv/export?format=xlsx";
 
-function switchWeek(week, btn) {
+function changeWeek(step) {
+    let newWeek = currentWeek + step;
+    if (newWeek >= 1 && newWeek <= 5) {
+        switchWeek(newWeek);
+    }
+}
+
+function switchWeek(week) {
     currentWeek = week;
-    document.querySelectorAll('.dropdown-content button').forEach(function(b) { b.classList.remove('active'); });
-    if(btn) btn.classList.add('active');
-    
     document.getElementById('selected-week-text').innerText = WEEK_TITLES[week];
     
     const dates = WEEK_DATES[week];
@@ -476,7 +440,7 @@ window.onload = function() {
     const bg = localStorage.getItem('custom_app_background');
     if(bg) document.getElementById('bg-overlay').style.backgroundImage = "url('" + bg + "')";
     loadDataFromDrive();
-    switchWeek(1, null);
+    switchWeek(1);
 };
 </script>
 </body>
