@@ -181,7 +181,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
         table-layout: fixed;
     }
 
-    th, td { padding: 4px 1px; }
+    th, td { padding: 2px 1px; }
 
     .team-selector { scale: 0.7; padding: 2px; margin-bottom: 2px; }
     .music-center-controller { width: 100%; scale: 0.65; margin-top: 5px; position: relative; left: 0; transform: none; }
@@ -421,27 +421,22 @@ function renderUI() {
     if (!stored) { tbody.innerHTML = "<tr><td colspan='"+(dates.length+2)+"'>Đang tải dữ liệu...</td></tr>"; return; }
     const data = JSON.parse(stored);
     tbody.innerHTML = ''; let totalW = 0;
-    
     for (let i = 0; i < 7; i++) {
         let name = (data.names[i] || "Thành viên").replace('⭐','').trim();
-        if(i<2) { 
-            document.getElementById(`name-leader${i+1}`).innerText = name.toUpperCase(); 
-            document.getElementById(`img-leader${i+1}`).src = `img/${formatFileName(name)}.png`; 
-        }
-        
+        if(i<2) { document.getElementById(`name-leader${i+1}`).innerText = name.toUpperCase(); document.getElementById(`img-leader${i+1}`).src = `img/${formatFileName(name)}.png`; }
         let mSum = 0;
-        const row = document.createElement('tr');
-        row.innerHTML = `<td class="${i<2?'leader-name-cell':''}">${i<2?'⭐':''}${name}</td>`;
-        
-        // Chỉ lấy hàng đầu tiên (data.values[i][0]) - bỏ qua hàng ngày tháng
-        for (let k = 0; k < dates.length; k++) { 
-            let v = (data.values[i] && data.values[i][0]) ? (data.values[i][0][k] || 0) : 0; 
-            row.innerHTML += `<td>${formatValueCell(v)}</td>`; 
-            mSum += v; 
+        for (let j = 0; j < 2; j++) {
+            const row = document.createElement('tr');
+            if (j === 0) row.innerHTML = `<td rowspan="2" class="${i<2?'leader-name-cell':''}">${i<2?'⭐':''}${name}</td>`;
+            for (let k = 0; k < dates.length; k++) { 
+                let v = (data.values[i] && data.values[i][j]) ? (data.values[i][j][k] || 0) : 0; 
+                row.innerHTML += `<td>${formatValueCell(v)}</td>`; 
+                mSum += v; 
+            }
+            if (j === 0) row.innerHTML += `<td rowspan="2" class="col-member-total">${formatValueCell(0)}</td>`;
+            tbody.appendChild(row);
         }
-        
-        row.innerHTML += `<td class="col-member-total">${formatValueCell(mSum)}</td>`;
-        tbody.appendChild(row);
+        tbody.lastChild.previousSibling.querySelector('.col-member-total').innerHTML = formatValueCell(mSum);
         totalW += mSum;
     }
     tbody.innerHTML += `<tr class="row-total-week"><td colspan="${dates.length+2}">TỔNG TUẦN: ${totalW.toLocaleString('vi-VN')} KM</td></tr>`;
@@ -464,11 +459,9 @@ async function loadData() {
                     const numDays = WEEK_DATES[w].length;
                     for(let i=0; i<7; i++) {
                         let r = json[idx+1+i*2]; if(!r) break;
-                        d.names.push(r[0]); 
-                        // Vẫn lưu cả 2 hàng vào LocalStorage để đảm bảo cấu trúc nhưng render sẽ chỉ lấy hàng 1
-                        d.values.push([r.slice(1,1+numDays), json[idx+2+i*2].slice(1,1+numDays)]);
+                        d.names.push(r[0]); d.values.push([r.slice(1,1+numDays), json[idx+2+i*2].slice(1,1+numDays)]);
                     }
-                    d.monthTotal = d.values.reduce((acc, curr) => acc + curr[0].reduce((a,b)=>a+(b||0),0), 0);
+                    d.monthTotal = d.values.reduce((acc, curr) => acc + curr[0].reduce((a,b)=>a+(b||0),0) + curr[1].reduce((a,b)=>a+(b||0),0), 0);
                     localStorage.setItem(`data_${t}_W${w}`, JSON.stringify(d));
                 }
             });
@@ -488,10 +481,13 @@ function changeBackground(i) {
 window.onload = () => {
     const bg = localStorage.getItem('bg_tcr');
     if(bg) document.getElementById('bg-overlay').style.backgroundImage = `url(${bg})`;
+    
+    // Kiểm tra đăng nhập cũ
     if (localStorage.getItem('tcr_auth_persist') === 'true') {
         document.getElementById('login-overlay').style.display = 'none';
         playRandomSong();
     }
+    
     loadData(); switchWeek(1);
 };
 </script>
