@@ -34,8 +34,8 @@
 
 /* HIỆU ỨNG HOA ĐÀO RƠI */
 .sakura {
-    position: fixed; top: -10%; z-index: 9999; pointer-events: none;
-    background: #ffb7c5; opacity: 0.8;
+    position: fixed; top: -10%; z-index: 999; pointer-events: none;
+    background: #ffb7c5; opacity: 0.8; border-radius: 50% 0 50% 50%;
     animation: fall linear infinite, sway ease-in-out infinite;
 }
 @keyframes fall { 0% { top: -10%; } 100% { top: 110%; } }
@@ -94,18 +94,19 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 .icon-btn { cursor: pointer; color: #ffeb3b; font-size: 18px; display: flex; align-items: center; justify-content: center; opacity: 0.8; transition: 0.3s; }
 .icon-btn:hover { opacity: 1; transform: scale(1.1); }
 
-/* --- PHẦN CHƠI NHẠC --- */
-.music-center-controller { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 350px; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 10; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 25px; border: 1px solid rgba(255,235,59,0.3); }
+/* --- PHẦN CHƠI NHẠC - BỎ KHUNG --- */
+.music-center-controller { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 400px; display: flex; flex-direction: column; align-items: center; gap: 5px; z-index: 10; padding: 10px; }
 .music-btns { display: flex; align-items: center; gap: 25px; }
 .music-btn { cursor: pointer; color: #ffeb3b; font-size: 18px; transition: 0.3s; display: flex; align-items: center; justify-content: center; user-select: none; }
 .music-btn:hover { transform: scale(1.2); }
 .progress-container { width: 100%; display: flex; align-items: center; gap: 10px; font-size: 10px; color: #ffeb3b; position: relative; }
-#progress-bar { flex-grow: 1; height: 4px; background: rgba(255,235,59,0.2); border-radius: 2px; cursor: pointer; position: relative; display: flex; align-items: flex-end; }
-#progress-fill { height: 100%; background: #ffeb3b; width: 0%; border-radius: 2px; z-index: 2; position: relative; }
-.wave-container { position: absolute; width: 100%; height: 12px; bottom: 0; left: 0; display: flex; align-items: flex-end; justify-content: space-around; pointer-events: none; z-index: 1; opacity: 0.6; }
-.wave-bar { width: 2px; background: #ffeb3b; border-radius: 1px; height: 3px; transition: height 0.2s ease; }
+#progress-bar { flex-grow: 1; height: 3px; background: rgba(255,235,59,0.2); border-radius: 2px; cursor: pointer; position: relative; }
+#progress-fill { height: 100%; background: #ffeb3b; width: 0%; border-radius: 2px; z-index: 3; position: relative; }
+/* Sóng nhạc đứng trên đường line */
+.wave-container { position: absolute; width: 100%; height: 20px; bottom: 3px; left: 0; display: flex; align-items: flex-end; justify-content: space-around; pointer-events: none; z-index: 1; }
+.wave-bar { width: 2px; background: #ffeb3b; border-radius: 1px; height: 2px; transition: height 0.15s ease; opacity: 0.6; }
 .song-info-display { width: 100%; overflow: hidden; height: 18px; position: relative; text-align: center; }
-#song-name-center { font-size: 12px; color: #ffeb3b; white-space: nowrap; position: absolute; width: 100%; font-weight: 600; }
+#song-name-center { font-size: 12px; color: #ffeb3b; white-space: nowrap; position: absolute; width: 100%; font-weight: 600; opacity: 0.8; }
 
 @media screen and (max-width: 768px) {
     header h1 { font-size: 18px; }
@@ -192,7 +193,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
                     <div id="progress-fill"></div>
                     <div class="wave-container" id="wave-container">
                         <script>
-                            for(let i=0; i<30; i++) document.write('<div class="wave-bar"></div>');
+                            for(let i=0; i<40; i++) document.write('<div class="wave-bar"></div>');
                         </script>
                     </div>
                 </div>
@@ -204,17 +205,28 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
         </div>
 
         <input type="file" id="bgInput" accept="image/*" style="display:none" onchange="changeBackground(this)">
-        <audio id="bgMusic" onplay="updateUI(true)" onpause="updateUI(false)" onended="nextSong()" ontimeupdate="updateProgress()"></audio>
+        <audio id="bgMusic" onplay="updateUI(true)" onpause="updateUI(false)" onended="playRandomSong()" ontimeupdate="updateProgress()"></audio>
     </div>
 </main>
 
 <script>
 // DANH SÁCH NHẠC TRONG THƯ MỤC music/
 const songList = [
-    { title: "Happy New Year - ABBA", file: "music/HappyNewYear.mp3" },
+    { title: "Bài hát 1", file: "music/song1.mp3" },
+    { title: "Bài hát 2", file: "music/song2.mp3" },
+    { title: "Bài hát 3", file: "music/song3.mp3" },
+    { title: "Nhạc Tết Sôi Động", file: "music/tet.mp3" }
 ];
-let currentSongIndex = 0;
+let currentSongIndex = -1;
 let waveInterval;
+
+function playRandomSong() {
+    let nextIndex;
+    do {
+        nextIndex = Math.floor(Math.random() * songList.length);
+    } while (nextIndex === currentSongIndex && songList.length > 1);
+    playSong(nextIndex);
+}
 
 function playSong(index) {
     const audio = document.getElementById('bgMusic');
@@ -227,15 +239,8 @@ function playSong(index) {
     audio.play().catch(e => console.log("Phát nhạc thất bại."));
 }
 
-function nextSong() {
-    let nextIndex = (currentSongIndex + 1) % songList.length;
-    playSong(nextIndex);
-}
-
-function prevSong() {
-    let prevIndex = (currentSongIndex - 1 + songList.length) % songList.length;
-    playSong(prevIndex);
-}
+function nextSong() { playRandomSong(); }
+function prevSong() { playRandomSong(); }
 
 function updateUI(isPlaying) {
     const btn = document.getElementById('playPauseBtnCenter');
@@ -253,7 +258,7 @@ function startWaves() {
     const bars = document.querySelectorAll('.wave-bar');
     waveInterval = setInterval(() => {
         bars.forEach(bar => {
-            const height = Math.random() * 8 + 3; // Sóng thấp từ 3px đến 11px
+            const height = Math.random() * 12 + 2; 
             bar.style.height = height + 'px';
         });
     }, 150);
@@ -262,12 +267,12 @@ function startWaves() {
 function stopWaves() {
     clearInterval(waveInterval);
     const bars = document.querySelectorAll('.wave-bar');
-    bars.forEach(bar => bar.style.height = '3px');
+    bars.forEach(bar => bar.style.height = '2px');
 }
 
 function toggleMusic() {
     const audio = document.getElementById('bgMusic');
-    if (audio.paused) { if(!audio.src) playSong(0); else audio.play(); } 
+    if (audio.paused) { if(!audio.src) playRandomSong(); else audio.play(); } 
     else { audio.pause(); }
 }
 
@@ -299,22 +304,21 @@ function formatTime(seconds) {
     return min + ":" + (sec < 10 ? "0" + sec : sec);
 }
 
+// Sửa lại logic hoa đào rơi
 function createSakura() {
     const sakura = document.createElement('div');
     sakura.className = 'sakura';
-    const shapes = ['50% 0 50% 50%', '50% 50% 0 50%', '20% 80% 20% 80%'];
-    sakura.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
-    const size = Math.random() * 7 + 6 + 'px';
+    const size = Math.random() * 10 + 10 + 'px';
     sakura.style.width = size;
-    sakura.style.height = (parseFloat(size) * (Math.random() * 0.5 + 0.8)) + 'px';
+    sakura.style.height = size;
     sakura.style.left = Math.random() * 100 + 'vw';
-    const fallDuration = Math.random() * 5 + 7 + 's';
+    const fallDuration = Math.random() * 5 + 8 + 's';
     sakura.style.animationDuration = `${fallDuration}, ${Math.random() * 2 + 3}s`;
-    sakura.style.animationDelay = `-${Math.random() * 10}s`;
     document.body.appendChild(sakura);
     setTimeout(() => { sakura.remove(); }, fallDuration * 1000);
 }
-setInterval(createSakura, 500);
+// Chạy hàm tạo hoa đào ngay lập tức
+setInterval(createSakura, 600);
 
 const _u = "VENS"; const _p = "MQ==";
 function checkLogin() {
@@ -323,7 +327,7 @@ function checkLogin() {
     if (btoa(u.toUpperCase()) === _u && btoa(p) === _p) {
         document.getElementById('login-overlay').style.display = 'none';
         sessionStorage.setItem('tcr_auth', 'true');
-        playSong(Math.floor(Math.random() * songList.length));
+        playRandomSong();
     } else { document.getElementById('login-err').style.display = 'block'; }
 }
 if (sessionStorage.getItem('tcr_auth') === 'true') document.getElementById('login-overlay').style.display = 'none';
@@ -332,18 +336,15 @@ let currentTeam = "TEAM A", currentWeek = 1;
 const WEEK_DATES = { 1: ["23/12", "24/12", "25/12", "26/12", "27/12", "28/12"], 2: ["29/12", "30/12", "31/12", "01/01", "02/01", "03/01", "04/01"], 3: ["05/01", "06/01", "07/01", "08/01", "09/01", "10/01", "11/01"], 4: ["12/01", "13/01", "14/01", "15/01", "16/01", "17/01", "18/01"], 5: ["19/01", "20/01", "21/01", "22/01"] };
 const WEEK_TITLES = { 1: "🚩 TUẦN 1: KHỞI ĐỘNG", 2: "⚡ TUẦN 2: TĂNG TỐC", 3: "🔥 TUẦN 3: BỨT PHÁ", 4: "🏆 TUẦN 4: VỀ ĐÍCH", 5: "👑 TUẦN 5: VINH QUANG" };
 const WEEK_RANGE_TEXT = { 1: "(23/12/2025 đến 28/12/2025)", 2: "(29/12/2025 đến 04/01/2026)", 3: "(05/01/2026 đến 11/01/2026)", 4: "(12/01/2026 đến 18/01/2026)", 5: "(19/01/2026 đến 22/01/2026)" };
-const DRIVE_FILE_URL = "https://docs.google.com/spreadsheets/d/1SUHiQixRuR2qZ4bFMfUW-T6PdHyEhrsv/export?format=xlsx";
+const DRIVE_FILE_URL = "";
 
 function changeWeek(s) { let n = currentWeek + s; if (n >= 1 && n <= 5) switchWeek(n); }
 function switchWeek(w) { currentWeek = w; document.getElementById('selected-week-text').innerText = WEEK_TITLES[w]; document.getElementById('selected-week-dates').innerText = WEEK_RANGE_TEXT[w]; renderUI(); }
 function switchTeam(v) { currentTeam = v; document.getElementById('display-team-name').innerText = v; renderUI(); }
 function formatFileName(n) { return n.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/\s+/g, "").toLowerCase(); }
 
-// Hàm render dữ liệu với logic làm mờ số 0
 function formatValueCell(n) { 
-    if (n === 0 || isNaN(n)) {
-        return `<span class="zero-value">0</span>`;
-    }
+    if (n === 0 || isNaN(n)) { return `<span class="zero-value">0</span>`; }
     return n.toLocaleString('vi-VN');
 }
 
@@ -396,7 +397,6 @@ async function loadData() {
                         let r = json[idx+1+i*2]; if(!r) break;
                         d.names.push(r[0]); d.values.push([r.slice(1,1+numDays), json[idx+2+i*2].slice(1,1+numDays)]);
                     }
-                    // Tính monthTotal (ở ví dụ này giả định lấy từ cell cụ thể nếu có hoặc tính toán)
                     d.monthTotal = d.values.reduce((acc, curr) => acc + curr[0].reduce((a,b)=>a+(b||0),0) + curr[1].reduce((a,b)=>a+(b||0),0), 0);
                     localStorage.setItem(`data_${t}_W${w}`, JSON.stringify(d));
                 }
@@ -418,6 +418,8 @@ window.onload = () => {
     const bg = localStorage.getItem('bg_tcr');
     if(bg) document.getElementById('bg-overlay').style.backgroundImage = `url(${bg})`;
     loadData(); switchWeek(1);
+    // Tự động phát nhạc nếu đã auth
+    if (sessionStorage.getItem('tcr_auth') === 'true') playRandomSong();
 };
 </script>
 </body>
