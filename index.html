@@ -108,19 +108,84 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 .song-info-display { width: 100%; overflow: hidden; height: 18px; position: relative; text-align: center; }
 #song-name-center { font-size: 12px; color: #ffeb3b; white-space: nowrap; position: absolute; width: 100%; font-weight: 600; opacity: 0.8; }
 
+/* --- MEDIA QUERY CHO DI ĐỘNG (MOBILE) --- */
 @media screen and (max-width: 768px) {
-    header h1 { font-size: 18px; }
-    header h2 { font-size: 11px; }
-    header h3 { font-size: 12px; }
-    .team-outside-info h2 { font-size: 30px; }
-    .dropbtn { min-width: 220px; font-size: 12px; padding: 8px 15px; }
-    .team-display-container { flex-direction: row; flex-wrap: wrap; width: 100%; height: auto; padding: 10px 5px; justify-content: center; gap: 5px; }
-    .leader-column { width: 45%; order: 1; }
-    .leader-frame { height: 90px; width: 90px; border-radius: 15px; }
-    .stats-table-container { width: 100%; margin: 10px 0; order: 2; overflow-x: hidden; }
-    table { font-size: 8.5px; }
-    .corner-controls { bottom: 10px; left: 10px; scale: 0.8; transform-origin: left bottom; }
-    .music-center-controller { width: 90%; bottom: 10px; scale: 0.8; }
+    header h1 { font-size: 14px; }
+    header h2 { font-size: 9px; }
+    header h3 { font-size: 10px; }
+    .team-outside-info h2 { font-size: 28px; }
+    .dropbtn { min-width: 140px; font-size: 11px; }
+
+    .team-display-container {
+        flex-direction: row; 
+        flex-wrap: wrap;
+        width: 100%; 
+        height: auto; 
+        padding: 5px; 
+        border-radius: 5px;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.9);
+    }
+
+    /* Đội trưởng đứng hàng trên, bỏ khung, mask mờ dần phần đuôi */
+    .leader-column {
+        display: flex !important;
+        flex-direction: column;
+        width: 49% !important; 
+        order: 1;
+        margin-bottom: -15px; 
+        z-index: 1;
+    }
+    
+    .leader-name-tag {
+        order: -1;
+        font-size: 9px;
+        min-height: 20px;
+        margin-bottom: 2px;
+        z-index: 2;
+        background: rgba(0,0,0,0.4);
+        border-radius: 5px;
+        padding: 0 5px;
+    }
+
+    .leader-frame {
+        width: 100%;
+        height: 180px; 
+        border: none !important;
+        border-radius: 0;
+        overflow: visible;
+        background: none;
+        -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%);
+        mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%);
+    }
+    .leader-frame img {
+        object-fit: cover; 
+        object-position: top;
+        width: 100%;
+        height: 100%;
+    }
+
+    .stats-table-container {
+        order: 2;
+        width: 100% !important;
+        margin: 0;
+        z-index: 5; 
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        padding-top: 5px;
+    }
+
+    table { 
+        font-size: 7.5px; 
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    th, td { padding: 2px 1px; }
+
+    .team-selector { scale: 0.7; padding: 2px; margin-bottom: 2px; }
+    .music-center-controller { width: 100%; scale: 0.65; margin-top: 5px; position: relative; left: 0; transform: none; }
+    .corner-controls { scale: 0.55; top: 2px; right: 2px; left: auto; bottom: auto; }
 }
 </style>
 </head>
@@ -130,7 +195,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
     <div class="login-box">
         <h2>LOGIN TCR</h2>
         <input type="text" id="username" placeholder="User Name">
-        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="password" placeholder="Password" onkeydown="if(event.key === 'Enter') checkLogin()">
         <button onclick="checkLogin()">Đăng Nhập</button>
         <p id="login-err" style="color: #ff5252; font-size: 12px; margin-top: 10px; display: none;">Sai tên đăng nhập hoặc mật khẩu!</p>
     </div>
@@ -160,6 +225,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
             <div class="leader-name-tag"><span>⭐</span><span id="name-leader1">LEADER 1</span></div>
             <div class="leader-frame"><img id="img-leader1" src=""></div>
         </div>
+        
         <div class="stats-table-container">
             <div class="controls-area">
                 <div class="team-selector">
@@ -172,6 +238,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
             
             <table id="statsTable"><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table>
         </div>
+
         <div class="leader-column">
             <div class="leader-name-tag"><span>⭐</span><span id="name-leader2">LEADER 2</span></div>
             <div class="leader-frame"><img id="img-leader2" src=""></div>
@@ -304,7 +371,6 @@ function formatTime(seconds) {
     return min + ":" + (sec < 10 ? "0" + sec : sec);
 }
 
-// Sửa lại logic hoa đào rơi
 function createSakura() {
     const sakura = document.createElement('div');
     sakura.className = 'sakura';
@@ -315,9 +381,8 @@ function createSakura() {
     const fallDuration = Math.random() * 5 + 8 + 's';
     sakura.style.animationDuration = `${fallDuration}, ${Math.random() * 2 + 3}s`;
     document.body.appendChild(sakura);
-    setTimeout(() => { sakura.remove(); }, fallDuration * 1000);
+    setTimeout(() => { sakura.remove(); }, parseFloat(fallDuration) * 1000);
 }
-// Chạy hàm tạo hoa đào ngay lập tức
 setInterval(createSakura, 600);
 
 const _u = "VENS"; const _p = "MQ==";
@@ -326,11 +391,10 @@ function checkLogin() {
     const p = document.getElementById('password').value;
     if (btoa(u.toUpperCase()) === _u && btoa(p) === _p) {
         document.getElementById('login-overlay').style.display = 'none';
-        sessionStorage.setItem('tcr_auth', 'true');
+        localStorage.setItem('tcr_auth_persist', 'true');
         playRandomSong();
     } else { document.getElementById('login-err').style.display = 'block'; }
 }
-if (sessionStorage.getItem('tcr_auth') === 'true') document.getElementById('login-overlay').style.display = 'none';
 
 let currentTeam = "TEAM A", currentWeek = 1;
 const WEEK_DATES = { 1: ["23/12", "24/12", "25/12", "26/12", "27/12", "28/12"], 2: ["29/12", "30/12", "31/12", "01/01", "02/01", "03/01", "04/01"], 3: ["05/01", "06/01", "07/01", "08/01", "09/01", "10/01", "11/01"], 4: ["12/01", "13/01", "14/01", "15/01", "16/01", "17/01", "18/01"], 5: ["19/01", "20/01", "21/01", "22/01"] };
@@ -417,11 +481,15 @@ function changeBackground(i) {
 window.onload = () => {
     const bg = localStorage.getItem('bg_tcr');
     if(bg) document.getElementById('bg-overlay').style.backgroundImage = `url(${bg})`;
+    
+    // Kiểm tra đăng nhập cũ
+    if (localStorage.getItem('tcr_auth_persist') === 'true') {
+        document.getElementById('login-overlay').style.display = 'none';
+        playRandomSong();
+    }
+    
     loadData(); switchWeek(1);
-    // Tự động phát nhạc nếu đã auth
-    if (sessionStorage.getItem('tcr_auth') === 'true') playRandomSong();
 };
 </script>
 </body>
 </html>
-
