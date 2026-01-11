@@ -79,6 +79,9 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 .month-value-highlight { font-size: 40px; }
 .col-member-total { font-weight: bold; color: #ffeb3b; font-size: 16px; }
 
+/* CSS làm mờ số 0 */
+.zero-value { opacity: 0.2; color: #ffffff; }
+
 /* CHỈNH SỬA VỊ TRÍ TEAM SELECTOR LÊN TRÊN */
 .controls-area { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; margin-bottom: 20px; }
 .team-selector { display: flex; gap: 20px; background: rgba(255,255,255,0.1); padding: 12px 30px; border-radius: 40px; border: 1px solid rgba(255,235,59,0.3); align-items: center; }
@@ -91,17 +94,18 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 .icon-btn { cursor: pointer; color: #ffeb3b; font-size: 18px; display: flex; align-items: center; justify-content: center; opacity: 0.8; transition: 0.3s; }
 .icon-btn:hover { opacity: 1; transform: scale(1.1); }
 
-.music-info-wrapper { display: flex; align-items: center; gap: 8px; border-left: 1px solid rgba(255,235,59,0.3); padding-left: 10px; }
-.song-container { width: 100px; overflow: hidden; position: relative; height: 16px; }
-#song-name { font-size: 11px; color: #ffeb3b; white-space: nowrap; position: absolute; animation: marquee 8s linear infinite; font-weight: 500; }
-@keyframes marquee { 0% { left: 100%; } 100% { left: -100%; } }
-
-.music-wave { width: 25px; height: 15px; display: flex; align-items: flex-end; gap: 2px; }
-.music-wave span { width: 2px; background: #ffeb3b; height: 3px; }
-.playing span { animation: wave 1s infinite ease-in-out; }
-@keyframes wave { 0%, 100% { height: 3px; } 50% { height: 12px; } }
-.music-wave span:nth-child(2) { animation-delay: 0.2s; }
-.music-wave span:nth-child(3) { animation-delay: 0.4s; }
+/* --- PHẦN CHƠI NHẠC --- */
+.music-center-controller { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 350px; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 10; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 25px; border: 1px solid rgba(255,235,59,0.3); }
+.music-btns { display: flex; align-items: center; gap: 25px; }
+.music-btn { cursor: pointer; color: #ffeb3b; font-size: 18px; transition: 0.3s; display: flex; align-items: center; justify-content: center; user-select: none; }
+.music-btn:hover { transform: scale(1.2); }
+.progress-container { width: 100%; display: flex; align-items: center; gap: 10px; font-size: 10px; color: #ffeb3b; position: relative; }
+#progress-bar { flex-grow: 1; height: 4px; background: rgba(255,235,59,0.2); border-radius: 2px; cursor: pointer; position: relative; display: flex; align-items: flex-end; }
+#progress-fill { height: 100%; background: #ffeb3b; width: 0%; border-radius: 2px; z-index: 2; position: relative; }
+.wave-container { position: absolute; width: 100%; height: 12px; bottom: 0; left: 0; display: flex; align-items: flex-end; justify-content: space-around; pointer-events: none; z-index: 1; opacity: 0.6; }
+.wave-bar { width: 2px; background: #ffeb3b; border-radius: 1px; height: 3px; transition: height 0.2s ease; }
+.song-info-display { width: 100%; overflow: hidden; height: 18px; position: relative; text-align: center; }
+#song-name-center { font-size: 12px; color: #ffeb3b; white-space: nowrap; position: absolute; width: 100%; font-weight: 600; }
 
 @media screen and (max-width: 768px) {
     header h1 { font-size: 18px; }
@@ -115,6 +119,7 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
     .stats-table-container { width: 100%; margin: 10px 0; order: 2; overflow-x: hidden; }
     table { font-size: 8.5px; }
     .corner-controls { bottom: 10px; left: 10px; scale: 0.8; transform-origin: left bottom; }
+    .music-center-controller { width: 90%; bottom: 10px; scale: 0.8; }
 }
 </style>
 </head>
@@ -173,17 +178,33 @@ th { background: rgba(255, 235, 59, 0.3); color: #ffeb3b; font-weight: bold; fon
 
         <div class="corner-controls">
             <div class="icon-btn" onclick="document.getElementById('bgInput').click()" title="Đổi nền">🖼️</div>
-            <div id="media-player-UI" class="music-info-wrapper">
-                <div class="icon-btn" id="playPauseBtn" onclick="toggleMusic()">▶️</div>
-                <div class="song-container">
-                    <div id="song-name">Đang tải nhạc...</div>
+        </div>
+
+        <div class="music-center-controller">
+            <div class="music-btns">
+                <div class="music-btn" onclick="prevSong()">|◀</div>
+                <div class="music-btn" id="playPauseBtnCenter" onclick="toggleMusic()">▶</div>
+                <div class="music-btn" onclick="nextSong()">▶|</div>
+            </div>
+            <div class="progress-container">
+                <span id="current-time">0:00</span>
+                <div id="progress-bar" onclick="seek(event)">
+                    <div id="progress-fill"></div>
+                    <div class="wave-container" id="wave-container">
+                        <script>
+                            for(let i=0; i<30; i++) document.write('<div class="wave-bar"></div>');
+                        </script>
+                    </div>
                 </div>
-                <div class="music-wave" id="musicWave"><span></span><span></span><span></span></div>
+                <span id="duration">0:00</span>
+            </div>
+            <div class="song-info-display">
+                <div id="song-name-center">Đang tải nhạc...</div>
             </div>
         </div>
 
         <input type="file" id="bgInput" accept="image/*" style="display:none" onchange="changeBackground(this)">
-        <audio id="bgMusic" onplay="updateUI(true)" onpause="updateUI(false)" onended="playRandomSong()"></audio>
+        <audio id="bgMusic" onplay="updateUI(true)" onpause="updateUI(false)" onended="nextSong()" ontimeupdate="updateProgress()"></audio>
     </div>
 </main>
 
@@ -195,29 +216,90 @@ const songList = [
     { title: "Bài hát 3", file: "music/song3.mp3" },
     { title: "Nhạc Tết Sôi Động", file: "music/tet.mp3" }
 ];
+let currentSongIndex = 0;
+let waveInterval;
 
-function playRandomSong() {
+function playSong(index) {
     const audio = document.getElementById('bgMusic');
-    const nameText = document.getElementById('song-name');
-    const randomIndex = Math.floor(Math.random() * songList.length);
-    const randomSong = songList[randomIndex];
-    audio.src = randomSong.file;
-    nameText.innerText = randomSong.title;
+    const nameText = document.getElementById('song-name-center');
+    currentSongIndex = index;
+    const song = songList[currentSongIndex];
+    audio.src = song.file;
+    nameText.innerText = song.title;
     audio.load();
     audio.play().catch(e => console.log("Phát nhạc thất bại."));
 }
 
+function nextSong() {
+    let nextIndex = (currentSongIndex + 1) % songList.length;
+    playSong(nextIndex);
+}
+
+function prevSong() {
+    let prevIndex = (currentSongIndex - 1 + songList.length) % songList.length;
+    playSong(prevIndex);
+}
+
 function updateUI(isPlaying) {
-    const btn = document.getElementById('playPauseBtn');
-    const wave = document.getElementById('musicWave');
-    if (isPlaying) { btn.innerText = '⏸️'; wave.classList.add('playing'); } 
-    else { btn.innerText = '▶️'; wave.classList.remove('playing'); }
+    const btn = document.getElementById('playPauseBtnCenter');
+    if (isPlaying) { 
+        btn.innerText = '||'; 
+        startWaves();
+    } else { 
+        btn.innerText = '▶'; 
+        stopWaves();
+    }
+}
+
+function startWaves() {
+    if(waveInterval) clearInterval(waveInterval);
+    const bars = document.querySelectorAll('.wave-bar');
+    waveInterval = setInterval(() => {
+        bars.forEach(bar => {
+            const height = Math.random() * 8 + 3; // Sóng thấp từ 3px đến 11px
+            bar.style.height = height + 'px';
+        });
+    }, 150);
+}
+
+function stopWaves() {
+    clearInterval(waveInterval);
+    const bars = document.querySelectorAll('.wave-bar');
+    bars.forEach(bar => bar.style.height = '3px');
 }
 
 function toggleMusic() {
     const audio = document.getElementById('bgMusic');
-    if (audio.paused) { if(!audio.src) playRandomSong(); else audio.play(); } 
+    if (audio.paused) { if(!audio.src) playSong(0); else audio.play(); } 
     else { audio.pause(); }
+}
+
+function updateProgress() {
+    const audio = document.getElementById('bgMusic');
+    const fill = document.getElementById('progress-fill');
+    const current = document.getElementById('current-time');
+    const total = document.getElementById('duration');
+    
+    if (audio.duration) {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        fill.style.width = percent + '%';
+        current.innerText = formatTime(audio.currentTime);
+        total.innerText = formatTime(audio.duration);
+    }
+}
+
+function seek(e) {
+    const audio = document.getElementById('bgMusic');
+    const bar = document.getElementById('progress-bar');
+    const rect = bar.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pos * audio.duration;
+}
+
+function formatTime(seconds) {
+    let min = Math.floor(seconds / 60);
+    let sec = Math.floor(seconds % 60);
+    return min + ":" + (sec < 10 ? "0" + sec : sec);
 }
 
 function createSakura() {
@@ -244,7 +326,7 @@ function checkLogin() {
     if (btoa(u.toUpperCase()) === _u && btoa(p) === _p) {
         document.getElementById('login-overlay').style.display = 'none';
         sessionStorage.setItem('tcr_auth', 'true');
-        playRandomSong();
+        playSong(Math.floor(Math.random() * songList.length));
     } else { document.getElementById('login-err').style.display = 'block'; }
 }
 if (sessionStorage.getItem('tcr_auth') === 'true') document.getElementById('login-overlay').style.display = 'none';
@@ -259,7 +341,14 @@ function changeWeek(s) { let n = currentWeek + s; if (n >= 1 && n <= 5) switchWe
 function switchWeek(w) { currentWeek = w; document.getElementById('selected-week-text').innerText = WEEK_TITLES[w]; document.getElementById('selected-week-dates').innerText = WEEK_RANGE_TEXT[w]; renderUI(); }
 function switchTeam(v) { currentTeam = v; document.getElementById('display-team-name').innerText = v; renderUI(); }
 function formatFileName(n) { return n.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/\s+/g, "").toLowerCase(); }
-function formatValue(n) { return (n===0 || isNaN(n)) ? "0" : n.toLocaleString('vi-VN'); }
+
+// Hàm render dữ liệu với logic làm mờ số 0
+function formatValueCell(n) { 
+    if (n === 0 || isNaN(n)) {
+        return `<span class="zero-value">0</span>`;
+    }
+    return n.toLocaleString('vi-VN');
+}
 
 function renderUI() {
     const key = "data_" + currentTeam + "_W" + currentWeek;
@@ -277,15 +366,19 @@ function renderUI() {
         for (let j = 0; j < 2; j++) {
             const row = document.createElement('tr');
             if (j === 0) row.innerHTML = `<td rowspan="2" class="${i<2?'leader-name-cell':''}">${i<2?'⭐':''}${name}</td>`;
-            for (let k = 0; k < dates.length; k++) { let v = (data.values[i] && data.values[i][j]) ? (data.values[i][j][k] || 0) : 0; row.innerHTML += `<td>${formatValue(v)}</td>`; mSum += v; }
-            if (j === 0) row.innerHTML += `<td rowspan="2" class="col-member-total">${formatValue(0)}</td>`;
+            for (let k = 0; k < dates.length; k++) { 
+                let v = (data.values[i] && data.values[i][j]) ? (data.values[i][j][k] || 0) : 0; 
+                row.innerHTML += `<td>${formatValueCell(v)}</td>`; 
+                mSum += v; 
+            }
+            if (j === 0) row.innerHTML += `<td rowspan="2" class="col-member-total">${formatValueCell(0)}</td>`;
             tbody.appendChild(row);
         }
-        tbody.lastChild.previousSibling.querySelector('.col-member-total').innerText = formatValue(mSum);
+        tbody.lastChild.previousSibling.querySelector('.col-member-total').innerHTML = formatValueCell(mSum);
         totalW += mSum;
     }
-    tbody.innerHTML += `<tr class="row-total-week"><td colspan="${dates.length+2}">TỔNG TUẦN: ${formatValue(totalW)} KM</td></tr>`;
-    tbody.innerHTML += `<tr class="row-total-month"><td colspan="${dates.length+2}">TỔNG THÁNG: <span class="month-value-highlight">${formatValue(data.monthTotal)} KM</span></td></tr>`;
+    tbody.innerHTML += `<tr class="row-total-week"><td colspan="${dates.length+2}">TỔNG TUẦN: ${totalW.toLocaleString('vi-VN')} KM</td></tr>`;
+    tbody.innerHTML += `<tr class="row-total-month"><td colspan="${dates.length+2}">TỔNG THÁNG: <span class="month-value-highlight">${data.monthTotal.toLocaleString('vi-VN')} KM</span></td></tr>`;
 }
 
 async function loadData() {
@@ -306,6 +399,8 @@ async function loadData() {
                         let r = json[idx+1+i*2]; if(!r) break;
                         d.names.push(r[0]); d.values.push([r.slice(1,1+numDays), json[idx+2+i*2].slice(1,1+numDays)]);
                     }
+                    // Tính monthTotal (ở ví dụ này giả định lấy từ cell cụ thể nếu có hoặc tính toán)
+                    d.monthTotal = d.values.reduce((acc, curr) => acc + curr[0].reduce((a,b)=>a+(b||0),0) + curr[1].reduce((a,b)=>a+(b||0),0), 0);
                     localStorage.setItem(`data_${t}_W${w}`, JSON.stringify(d));
                 }
             });
