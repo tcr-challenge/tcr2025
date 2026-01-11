@@ -399,7 +399,8 @@ async function loadData() {
                     
                     while (memberCount < 7 && currentRow < json.length) {
                         let r = json[currentRow];
-                        if (!r || r[0] === "Họ Tên") {
+                        // KIỂM TRA NGHIÊM NGẶT HƠN: Bỏ qua hàng tiêu đề ngày tháng hoặc hàng trống
+                        if (!r || !r[0] || r[0].toString().includes("Ngày") || r[0].toString().includes("Họ Tên")) {
                             currentRow++;
                             continue;
                         }
@@ -435,8 +436,6 @@ window.onload = () => {
     const bg = localStorage.getItem('bg_tcr');
     if(bg) document.getElementById('bg-overlay').style.backgroundImage = `url(${bg})`;
     loadData(); switchWeek(1);
-    // Tự động phát nhạc nếu bạn muốn
-    // playSong(Math.floor(Math.random() * songList.length));
 };
 </script>
 </body>
